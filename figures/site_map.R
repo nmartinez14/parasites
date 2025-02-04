@@ -7,7 +7,7 @@ source("lab_paths.R")
 setwd(file.path(local.path))
 setwd("parasites/figures")
 
-geo <- read.csv("../geography.csv")
+load("../parasitesData.Rdata")
 
 ## packages
 library(sf)
@@ -20,16 +20,7 @@ library(tidyverse)
 ## **********************************************************
 ## Make map
 ## **********************************************************
-crs.std <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
 
-## Subset to only have 1 point per mountain.
-geo <- geo %>% 
-  filter(!is.na(MtRange) & SubSite == 1 & MtRange != "Jemez" & Site != "UK") 
-
-## Create shapefile
-sites_sf<- st_as_sf(geo,
-                    coords = c("Long", "Lat"),
-                    crs = crs.std)
 ggplot() +
   geom_sf(data = sites_sf) +
   ggtitle("Map of Plot Locations")
@@ -69,7 +60,7 @@ map <- ggplot() +
 ## Toggle on to save out figure, updating filepath to your desired save location
 save.fig = FALSE
 if (save.fig == TRUE){
-  setwd("../../skyIslands/analysis/parasites/figures/")
+  setwd("parasites/figures")
   ggsave(map, file="map.pdf", height=6, width=4)
 }
 
