@@ -95,7 +95,8 @@ p1.parasite <- ggplot(crithidia_beediv, aes(x = Net_BeeDiversity,
             size = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "#3182bd"),
               alpha=0.4)+
-  scale_fill_manual(labels =  "Bombus 0.95") +
+  scale_color_manual(values = "#3182bd") +
+  scale_fill_manual(labels =  "Bombus 0.95", values = "#3182bd") +
   labs(x = "Bee diversity", y = "Crithidia prevalence",
        fill = "Credible interval") +
   theme_ms() +
@@ -126,7 +127,8 @@ p2.parasite <- ggplot(apicystis_beediv, aes(x = Net_BeeDiversity,
             linewidth = 1.5, color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__),
               fill= "#3182bd", alpha=0.4)+
-  scale_fill_manual(labels ="Bombus 0.95") +
+  scale_color_manual(values = "#3182bd") +
+  scale_fill_manual(labels =  "Bombus 0.95", values = "#3182bd")+
   labs(x = "Bee diversity", y = "Apicystis prevalence",
        fill = "Credible interval") +
   theme_ms() +
@@ -156,7 +158,8 @@ p3.parasite <- ggplot(crithidia_floraldiv, aes(x = MeanFloralDiversity,
                 color = "#3182bd"), size = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "#3182bd"),
               alpha=0.4) +
-  scale_fill_manual(labels = "Bombus 0.95") +
+  scale_color_manual(values = "#3182bd") +
+  scale_fill_manual(labels =  "Bombus 0.95", values = "#3182bd") +
     labs(x = "Floral diversity", y = "Crithidia prevalence",
          fill = "Credible interval") +
     theme_ms() +
@@ -188,7 +191,8 @@ p4.parasite <- ggplot(apicystis_floraldiv, aes(x = MeanFloralDiversity,
             size = 1.5, color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
               alpha=0.4, fill = "#3182bd")+
-  scale_fill_manual(labels ="Bombus 0.95")+
+  scale_color_manual(values = "#3182bd") +
+  scale_fill_manual(labels =  "Bombus 0.95", values = "#3182bd")+
   labs(x = "Floral diversity", y = "Apicystis prevalence",
        fill = "Credible interval") +
   theme_ms() +
@@ -254,7 +258,8 @@ p6.parasite <- ggplot(apicystis_bombusabun, aes(x = Net_BombusAbundance,
                                                 y = estimate__)) +
   geom_line(aes(x = Net_BombusAbundance, y= estimate__), size = 1.5, 
             color = "darkgoldenrod3") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = Bee), alpha=0.4)+
+  geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "darkgoldenrod3"), 
+              alpha=0.4)+
   scale_fill_manual(values = "darkgoldenrod3", labels ="Bombus 0.95") +
   labs(x = "Bombus abundance (log)", y = "Apicystis prevalence",
        fill = "Credible interval") +
@@ -281,7 +286,7 @@ p7.parasite <- ggplot(apicystis_hbabun, aes(x = Net_HBAbundance,
             color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "#3182bd"), 
               alpha=0.4)+
-  scale_fill_manual(labels ="Bombus 0.95") +
+  scale_fill_manual(labels ="Bombus 0.95", values = "#3182bd") +
   labs(x = "Apis abundance (log)", y = "Apicystis prevalence",
        fill = "Credible interval") +
   theme_ms() +
@@ -321,7 +326,7 @@ p8.parasite <- ggplot(crithidia_degree, aes(x = rare.degree, y = estimate__)) +
             size = 1.5, color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "#3182bd"),
               alpha=0.4) +
-  scale_fill_manual(labels ="Bombus 0.95")+
+  scale_fill_manual(labels ="Bombus 0.95", values= "#3182bd")+
     labs(x = "Degree", y = "Crithidia prevalence",
          fill = "Credible interval") +
     theme_ms() +
@@ -345,8 +350,8 @@ apicystis_degree <-
   apicystis.cond.effects[["ApicystisSpp.ApicystisSpp_rare.degree"]]
 
 p9.parasite <- ggplot(apicystis_degree, aes(x = rare.degree, y = estimate__)) +
-  geom_line(aes(x = rare.degree, y= estimate__), size = 1.5, color = "grey") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "grey"), alpha=0.4) +
+  geom_line(aes(x = rare.degree, y= estimate__), size = 1.5) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
   scale_fill_manual(labels ="Bombus 0.95")+
   labs(x = "Degree", y = "Apicystis prevalence",
        fill = "Credible interval") +
@@ -359,7 +364,7 @@ p9.parasite <- ggplot(apicystis_degree, aes(x = rare.degree, y = estimate__)) +
         axis.title.y = element_text(size=16),
         text = element_text(size=16)) +
    geom_point(data=bombus.par,
-               aes(y= SpApicystisParasitismRate, x=rare.degree)) 
+               aes(y= ApicystisParasitismRate, x=rare.degree)) 
 
 ggsave(p9.parasite, file="figures/apicystis_degree.pdf",
        height=5, width=10)
