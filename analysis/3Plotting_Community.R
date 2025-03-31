@@ -230,9 +230,9 @@ p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
 apicystis_lat <-
   apicystis.cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
 
-p6 <- ggplot(apicystis_lat, aes(x = Lat, y = estimate__)) +
+p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "#3182bd"), 
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd",
               alpha=0.4) +
   scale_fill_manual(labels ="Bombus 0.95") +
   labs(x = "Latitude (log)", y = "Apicystis prevalence",
