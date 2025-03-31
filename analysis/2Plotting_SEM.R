@@ -55,13 +55,6 @@ axis.degree <-  standardize.axis(labs.degree,
                                   bombus.par$rare.degree)
 
 
-## sp.par <- spec.orig[spec.orig$WeightsPar==1, ]
-## ## rare.degree (logged)
-## labs.degree <- (pretty(sp.par$rare.degree, n=10))
-## axis.degree <-  standardize.axis(labs.degree,
-##                                   sp.par$rare.degree)
-
-
 ## ***********************************************************************
 ## bee community diversity and abundance and parasitism
 ## ***********************************************************************
