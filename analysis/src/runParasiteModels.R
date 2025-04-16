@@ -106,7 +106,7 @@ runCombinedParasiteModels <- function(spec.data,## data
 
                 bform <- bf.fdiv +
                     ## bf.fabund +
-                    bf.bombusabund + bf.babund + bf.HBabund +
+                    bf.bombusabund + bf.HBabund +
                     bf.bdiv  +
                     bf.parasite.formulas[[1]]+
                     bf.parasite.formulas[[2]] +
@@ -118,7 +118,6 @@ runCombinedParasiteModels <- function(spec.data,## data
                 bform <-  bf.fdiv +
                     ## bf.fabund +
 
-                    bf.babund  +
                     bf.bdiv  +
                     bf.parasite.formulas[[1]]+
                     bf.parasite.formulas[[2]] +
@@ -132,7 +131,7 @@ runCombinedParasiteModels <- function(spec.data,## data
                 bform <-  bf.fdiv +
                     ## bf.fabund +
 
-                    bf.bombusabund + bf.babund + bf.HBabund +
+                    bf.bombusabund +  bf.HBabund +
                     bf.bdiv  +
                     bf.parasite.formulas[[1]]+
                     set_rescor(FALSE)
@@ -143,7 +142,6 @@ runCombinedParasiteModels <- function(spec.data,## data
 
                 bform <-  bf.fdiv +
                     ## bf.fabund +
-                    bf.babund
                     bf.bdiv  +
                     bf.parasite.formulas[[1]]+
                     set_rescor(FALSE)
