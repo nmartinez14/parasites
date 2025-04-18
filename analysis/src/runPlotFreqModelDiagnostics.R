@@ -79,7 +79,7 @@ run_plot_freq_model_diagnostics <- function(this_formula, #brms model formula
         
 
     }else if (this_family=='bernoulli') {
-        this_model_output <- glmmTMB(this_formula, data=this_data, family='binomial')
+        this_model_output <- glmer(this_formula, data=this_data, family= binomial(link = "logit"))
         diagnostic.plots <- plot(check_model(this_model_output, panel = TRUE))
         
         
