@@ -104,7 +104,7 @@ check_brms <- function(model,             # brms model
                        integer = FALSE,   # integer response? (TRUE/FALSE)
                        plot = TRUE,       # make plot?
                        ...                # further arguments for DHARMa::plotResiduals
-) {browser()
+) {#browser()
   mdata <- brms::standata(model)
   if (!"Y" %in% names(mdata))
     stop("Cannot extract the required information from this brms model")
