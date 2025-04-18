@@ -157,8 +157,7 @@ runCombinedParasiteModels <- function(spec.data,## data
                 set_rescor(FALSE)
         }else  if(length(parasites) == 1){
             bform <-
-                bf.parasite.formulas[[1]] +
-                set_rescor(FALSE)
+                bf.parasite.formulas[[1]] 
         }
     }
 
