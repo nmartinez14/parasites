@@ -173,7 +173,7 @@ bombus.ss <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        xvar.name=xvar.order[1])
 
 checked.bombus.CrithidiaPresence <-
-  check_brms(bombus.ss)
+  check_brms(bombus.ss$fit)
 testDispersion(checked.bombus.CrithidiaPresence)
 ## HB and bombus abundance are colinear in crithidia model, so not a valid model
 
@@ -230,7 +230,7 @@ apis.ss <- runCombinedParasiteModels(spec.data= spec.apis,
                                      ncores=ncores,
                                      site.lat=site.or.lat,
                                      xvar.name=xvar.order[1])
-## Multiple variables are collinear, so not a valid model
+## Multiple variables are collinear for both parasites, so not a valid model
 
 ## apis abundance
 apis.ha <- runCombinedParasiteModels(spec.data= spec.apis,
@@ -239,6 +239,7 @@ apis.ha <- runCombinedParasiteModels(spec.data= spec.apis,
                                      ncores=ncores,
                                      site.lat=site.or.lat,
                                      xvar.name=xvar.order[2])
+## Multiple variables are collinear for both parasites, so not a valid model
 
 ## apis abundance + no floral diversity
 apis.ha2 <- runCombinedParasiteModels(spec.data= spec.apis,
@@ -257,7 +258,7 @@ apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
                                       data2= list(phylo_matrix=phylo_matrix),
                                       site.lat=site.or.lat,
                                       xvar.name=xvar.order[3])
-
+## For Crithida model floral diversity/Lat/SRDoy collinear, not a valid model.
 ## **********************************************************
 ## Apis loo summaries
 ## **********************************************************
@@ -265,24 +266,20 @@ apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
 ## **********************************************************
 
 loo.crithidia.ha2 <- loo(apis.ha2, resp="CrithidiaPresence")
-loo.crithidia.ss <- loo(apis.ss, resp="CrithidiaPresence")
 loo.crithidia.ha <- loo(apis.ha, resp="CrithidiaPresence")
 loo.crithidia.div <- loo(apis.div, resp="CrithidiaPresence")
 
-loo_compare(loo.crithidia.ha2, loo.crithidia.ha, loo.crithidia.div, 
-            loo.crithidia.ss)
+loo_compare(loo.crithidia.ha2, loo.crithidia.ha, loo.crithidia.div)
 
 ## **********************************************************
 ## apicystis
 ## **********************************************************
 
 loo.apicystis.ha2 <- loo(apis.ha2, resp="ApicystisSpp")
-loo.apicystis.ss <- loo(apis.ss, resp="ApicystisSpp")
 loo.apicystis.ha <- loo(apis.ha, resp="ApicystisSpp")
 loo.apicystis.div <- loo(apis.div, resp="ApicystisSpp")
 
-loo_compare(loo.apicystis.ha2, loo.apicystis.ha, loo.apicystis.div, 
-            loo.apicystis.ss)
+loo_compare(loo.apicystis.ha2, loo.apicystis.ha, loo.apicystis.div)
 
 ## **********************************************************
 ## save models and loo results
