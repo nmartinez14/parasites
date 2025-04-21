@@ -194,6 +194,11 @@ bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
 ## **********************************************************
 ## not including ss because HB abundance and bombus abundance are colinear
 
+load("saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_bombus_abundance.Rdata")
+bombus.ba <- fit.parasite
+load("saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
+bombus.ss <- fit.parasite
+
 loo.crithidia.ba <- loo(bombus.ba, resp="CrithidiaPresence")
 #loo.crithidia.ss <- loo(bombus.ss, resp="CrithidiaPresence")
 
@@ -264,22 +269,24 @@ apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
 ## **********************************************************
 ## crithidia
 ## **********************************************************
+load("saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_apis_abundance.Rdata")
+apis.ha2 <- fit.parasite
+load("saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_diversity.Rdata")
+apis.div <- fit.parasite
 
 loo.crithidia.ha2 <- loo(apis.ha2, resp="CrithidiaPresence")
-loo.crithidia.ha <- loo(apis.ha, resp="CrithidiaPresence")
 loo.crithidia.div <- loo(apis.div, resp="CrithidiaPresence")
 
-loo_compare(loo.crithidia.ha2, loo.crithidia.ha, loo.crithidia.div)
+loo_compare(loo.crithidia.ha2, loo.crithidia.div)
 
 ## **********************************************************
 ## apicystis
 ## **********************************************************
 
 loo.apicystis.ha2 <- loo(apis.ha2, resp="ApicystisSpp")
-loo.apicystis.ha <- loo(apis.ha, resp="ApicystisSpp")
 loo.apicystis.div <- loo(apis.div, resp="ApicystisSpp")
 
-loo_compare(loo.apicystis.ha2, loo.apicystis.ha, loo.apicystis.div)
+loo_compare(loo.apicystis.ha2, loo.apicystis.div)
 
 ## **********************************************************
 ## save models and loo results

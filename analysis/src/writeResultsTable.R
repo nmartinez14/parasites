@@ -45,7 +45,7 @@ write.ms.table <- function(mod.output, mod.name){
                 file=sprintf("saved/tables/%s.txt", mod.name),
                 sep="&")
 
-    write.csv(sum.mod,
-              file=sprintf("saved/tables/%s.csv", mod.name))
+    #write.csv(sum.mod,
+     #         file=sprintf("saved/tables/%s.csv", mod.name))
 }
 
