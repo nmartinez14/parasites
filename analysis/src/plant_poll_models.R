@@ -34,7 +34,6 @@ if(site.or.lat ==  "lat"){
     ## bombus abund
     formula.bombus.abund <- formula(Net_BombusAbundance |
                                     subset(Weights)~
-                                        MeanFloralAbundance +
                                         SRDoyPoly1 + SRDoyPoly2 +
                                         Year + Lat +
                                         Area +
@@ -43,7 +42,6 @@ if(site.or.lat ==  "lat"){
     ## HB abund
     formula.HB.abund <- formula(Net_HBAbundance |
                                 subset(Weights)~
-                                    MeanFloralAbundance +
                                     SRDoyPoly1 + SRDoyPoly2 +
                                     Year + Lat +
                                     Area +
@@ -69,7 +67,6 @@ if(site.or.lat ==  "lat"){
     ## bombus abund
     formula.bombus.abund <- formula(Net_BombusAbundance |
                                     subset(Weights)~
-                                        MeanFloralAbundance +
                                         MeanFloralDiversity +
                                         SRDoyPoly1 + SRDoyPoly2 +
                                         Site
