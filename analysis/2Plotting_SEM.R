@@ -58,7 +58,7 @@ axis.degree <-  standardize.axis(labs.degree,
 ## ***********************************************************************
 ## bee community diversity and abundance and parasitism
 ## ***********************************************************************
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_all_bees.Rdata")
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_bombus_abundance.Rdata")
 fit.bombus <- fit.parasite
 
 load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
@@ -215,29 +215,29 @@ ggsave(parasite.dilution, file="figures/parasite_diversity.pdf", height=8, width
 ## crithidia ~ bee abundance
 
 crithidia_beeabun <-
-  bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_Net_BeeAbundance"]]
+  bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_Net_BombusAbundance"]]
 
-p5.parasite <- ggplot(crithidia_beeabun, aes(x = Net_BeeAbundance, 
+p5.parasite <- ggplot(crithidia_beeabun, aes(x = Net_BombusAbundance, 
                                              y = estimate__)) +
-  geom_line(aes(x = Net_BeeAbundance, y= estimate__), size = 1.5, ) +
+  geom_line(aes(x = Net_BombusAbundance, y= estimate__), size = 1.5, ) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
   scale_fill_manual(labels ="Bombus 0.95")+
-  labs(x = "Bee abundance (log)", y = "Crithidia prevalence",
+  labs(x = "Bombus abundance (log)", y = "Crithidia prevalence",
        fill = "Credible interval") +
   theme_ms() +
   #theme(legend.position = "bottom") +
   scale_x_continuous(
-    breaks = axis.bee.abund,
-    labels =  labs.bee.abund) +
+    breaks = axis.bombus.abund,
+    labels =  labs.bombus.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
         text = element_text(size=16)) +
    geom_jitter(data=spec.uni,
-               aes(y= CrithidiaParasitismRate, x=Net_BeeAbundance), 
+               aes(y= CrithidiaParasitismRate, x=Net_BombusAbundance), 
                width=0.05) 
 
 
-ggsave(p5.parasite, file="figures/crithidia_beeabundance_bombus.pdf",
+ggsave(p5.parasite, file="figures/crithidia_bombusabundance_bombus.pdf",
        height=4, width=6)
 
 
