@@ -264,6 +264,7 @@ apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
                                       site.lat=site.or.lat,
                                       xvar.name=xvar.order[3])
 ## For Crithida model floral diversity/Lat/SRDoy collinear, not a valid model.
+
 ## **********************************************************
 ## Apis loo summaries
 ## **********************************************************
@@ -275,9 +276,8 @@ load("saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_diversity.Rdata")
 apis.div <- fit.parasite
 
 loo.crithidia.ha2 <- loo(apis.ha2, resp="CrithidiaPresence")
-loo.crithidia.div <- loo(apis.div, resp="CrithidiaPresence")
 
-loo_compare(loo.crithidia.ha2, loo.crithidia.div)
+#loo_compare(loo.crithidia.ha2, loo.crithidia.div)
 
 ## **********************************************************
 ## apicystis
