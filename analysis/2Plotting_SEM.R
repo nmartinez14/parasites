@@ -117,11 +117,10 @@ apicystis_beediv <-apicystis.cond.effects[["ApicystisSpp.ApicystisSpp_Net_BeeDiv
 p2.parasite <- ggplot(apicystis_beediv, aes(x = Net_BeeDiversity, 
                                             y = estimate__)) +
   geom_line(aes(x = Net_BeeDiversity, y= estimate__), 
-            linewidth = 1.5, color = "#3182bd") +
+            linewidth = 1.5, color = "darkgoldenrod3") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__),
-              fill= "#3182bd", alpha=0.4)+
-  scale_color_manual(values = "#3182bd") +
-  scale_fill_manual(labels =  "Bombus 0.95", values = "#3182bd")+
+              fill= "darkgoldenrod3", alpha=0.4)+
+  scale_fill_manual(labels =  "Bombus 0.95")+
   labs(x = "Bee diversity", y = "Apicystis prevalence",
        fill = "Credible interval") +
   theme_ms() +
@@ -215,29 +214,30 @@ ggsave(parasite.dilution, file="figures/parasite_diversity.pdf", height=8, width
 ## crithidia ~ bee abundance
 
 crithidia_beeabun <-
-  bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_Net_BombusAbundance"]]
+  bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_Net_HBAbundance"]]
 
-p5.parasite <- ggplot(crithidia_beeabun, aes(x = Net_BombusAbundance, 
+p5.parasite <- ggplot(crithidia_beeabun, aes(x = Net_HBAbundance, 
                                              y = estimate__)) +
-  geom_line(aes(x = Net_BombusAbundance, y= estimate__), size = 1.5, ) +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
+  geom_line(aes(x = Net_HBAbundance, y= estimate__), size = 1.5, color = "#3182bd") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, 
+              fill = "#3182bd") +
   scale_fill_manual(labels ="Bombus 0.95")+
-  labs(x = "Bombus abundance (log)", y = "Crithidia prevalence",
+  labs(x = "Apis abundance (log)", y = "Crithidia prevalence",
        fill = "Credible interval") +
   theme_ms() +
   #theme(legend.position = "bottom") +
   scale_x_continuous(
-    breaks = axis.bombus.abund,
-    labels =  labs.bombus.abund) +
+    breaks = axis.HB.abund,
+    labels =  labs.HB.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
         text = element_text(size=16)) +
    geom_jitter(data=spec.uni,
-               aes(y= CrithidiaParasitismRate, x=Net_BombusAbundance), 
+               aes(y= CrithidiaParasitismRate, x=Net_HBAbundance), 
                width=0.05) 
 
 
-ggsave(p5.parasite, file="figures/crithidia_bombusabundance_bombus.pdf",
+ggsave(p5.parasite, file="figures/crithidia_hbabundance_bombus.pdf",
        height=4, width=6)
 
 
@@ -331,7 +331,7 @@ p8.parasite <- ggplot(crithidia_degree, aes(x = rare.degree, y = estimate__)) +
           axis.title.y = element_text(size=16),
           text = element_text(size=16)) +
   geom_point(data= bombus.par,
-              aes(y= SpCrithidiaParasitismRate, x=rare.degree))
+              aes(y= CrithidiaParasitismRate, x=rare.degree))
   
 
 

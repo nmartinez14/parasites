@@ -51,11 +51,14 @@ axis.bee.div <-  standardize.axis(labs.bee.div,
 ## ***********************************************************************
 ## bee community diversity and abundance and parasitism
 ## ***********************************************************************
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_all_bees.Rdata")
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_bombus_abundance.Rdata")
 fit.bombus <- fit.parasite
 
 load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
 fit.bombus.apicystis <- fit.parasite
+
+load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_apis_abundance.Rdata")
+fit.apis.apicystis <- fit.parasite
 
 load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_diversity.Rdata")
 fit.apis <- fit.parasite
@@ -63,6 +66,7 @@ fit.apis <- fit.parasite
 bombus.cond.effects <- conditional_effects(fit.bombus)
 apicystis.cond.effects <- conditional_effects(fit.bombus.apicystis)
 apis.cond.effects <- conditional_effects(fit.apis)
+apis.api.cond.effects <- conditional_effects(fit.apis.apicystis)
 ## Community level visuals
 ## ***********************************************************************
 ## bee community diversity and latitude
@@ -204,8 +208,8 @@ crithidia_lat <-
 
 p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__, fill = "#3182bd"),
-              alpha=0.4) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__),
+              alpha=0.4, fill = "#3182bd") +
   scale_fill_manual(labels ="Bombus 0.95") +
   labs(x = "Latitude (log)", y = "Crithidia prevalence") +
   theme_ms() +
@@ -231,8 +235,8 @@ apicystis_lat <-
   apicystis.cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
 
 p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd",
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "darkgoldenrod3") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "darkgoldenrod3",
               alpha=0.4) +
   scale_fill_manual(labels ="Bombus 0.95") +
   labs(x = "Latitude (log)", y = "Apicystis prevalence",
@@ -258,8 +262,9 @@ crithidia_lat_apis <-
 
 p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size= 1.5, 
-            linetype = "dotdash") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
+            linetype = "dotdash", color = "darkgoldenrod3") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, 
+              fill = "darkgoldenrod3") +
   scale_fill_manual(labels ="Apis 0.95") +
   labs(x = "Latitude (log)", y = "Crithidia prevalence") +
   theme_ms() +
@@ -281,13 +286,13 @@ p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
 ## Lat and apicystis in apis
 ################################################################################
 apicystis_lat_apis <-
-  apis.cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
+  apis.api.cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
 
 p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            color = "darkgoldenrod3",linetype = "dotdash") +
+            linetype = "dotdash") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "darkgoldenrod3") +
+              alpha=0.4) +
   scale_fill_manual(labels ="Apis 0.95") +
   labs(x = "Latitude (log)", y = "Apicystis prevalence",
        fill = "Credible interval") +
