@@ -104,7 +104,7 @@ xvars.ss <-  c("Net_BeeDiversity",
                "Net_HBAbundance",
                "rare.degree",
                "MeanFloralDiversity",
-               "SRDoy",
+               #"SRDoy",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
@@ -162,7 +162,8 @@ table(spec.bombus$ApicystisSpp[spec.bombus$WeightsPar ==1 ])
 
 xvar.order <- c("social_species",
                 "bombus_abundance",
-                "apis_abundance")
+                "apis_abundance",
+                "diversity")
 
 ## social species abundance as x var
 bombus.ss <- runCombinedParasiteModels(spec.data= spec.bombus,
@@ -185,7 +186,7 @@ bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        site.lat=site.or.lat,
                                        xvar.name=xvar.order[2])
 
-## bombus abundance only
+## apis abundance only
 bombus.ha <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.ha,
@@ -194,6 +195,17 @@ bombus.ha <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        site.lat=site.or.lat,
                                        xvar.name=xvar.order[3])
 ## For Crithidia bee div collinear with SRDOY(not quite VIF > 5)
+
+
+## no abundances, just bee diversity 
+bombus.div <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                       species.group="bombus",
+                                       xvars=xvars.div,
+                                       ncores=ncores,
+                                       data2= list(phylo_matrix=phylo_matrix),
+                                       site.lat=site.or.lat,
+                                       xvar.name=xvar.order[4])
+
 
 
 ## **********************************************************
@@ -207,11 +219,15 @@ load("saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_bombus_abundanc
 bombus.ba <- fit.parasite
 load("saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
 bombus.ss <- fit.parasite
+load("saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_apis_abundance.Rdata")
+bombus.ha <- fit.parasite
+load("saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_diversity.Rdata")
+bombus.div <- fit.parasite
 
 loo.crithidia.ba <- loo(bombus.ba, resp="CrithidiaPresence")
 loo.crithidia.ha <- loo(bombus.ha, resp="CrithidiaPresence")
-#loo.crithidia.ss <- loo(bombus.ss, resp="CrithidiaPresence")
-loo_compare(loo.crithidia.ba, loo.crithidia.ha)
+loo.crithidia.div <- loo(bombus.div, resp="CrithidiaPresence")
+loo_compare(loo.crithidia.ba, loo.crithidia.ha, loo.crithidia.div)
 
 ## **********************************************************
 ## apicystis
@@ -284,7 +300,7 @@ apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
                                       data2= list(phylo_matrix=phylo_matrix),
                                       site.lat=site.or.lat,
                                       xvar.name=xvar.order[4])
-## For Crithida model floral diversity/Lat/SRDoy collinear, not a valid model.
+## For Crithida model floral diversity/Lat/SRDoy collinear.
 
 ## **********************************************************
 ## Apis loo summaries
@@ -295,11 +311,13 @@ load("saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_apis_abundance.Rd
 apis.ha2 <- fit.parasite
 load("saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_diversity.Rdata")
 apis.div <- fit.parasite
+load("saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_bombus_abundance.Rdata")
+apis.ba <- fit.parasite
 
 loo.crithidia.ha2 <- loo(apis.ha2, resp="CrithidiaPresence")
-loo.crithidia.ba <- loo(apis.ba, resp="CrithidiaPresence")
+loo.crithidia.div <- loo(apis.div, resp="CrithidiaPresence")
 
-loo_compare(loo.crithidia.ha2, loo.crithidia.ba)
+loo_compare(loo.crithidia.ha2, loo.crithidia.div)
 
 ## **********************************************************
 ## apicystis
