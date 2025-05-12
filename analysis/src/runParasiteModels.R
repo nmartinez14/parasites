@@ -13,8 +13,8 @@ runCombinedParasiteModels <- function(spec.data,## data
                                       init=0,
                                       data2 = NULL, ## Data for the Phylogeny
                                       SEM = TRUE,
-                                      neg.binomial = FALSE,
                                       site.lat,
+                                      neg.binomial = FALSE,
                                       xvar.name,
                                       ...){
     ## Create a list with the formulas for the different parasites models
@@ -173,12 +173,7 @@ runCombinedParasiteModels <- function(spec.data,## data
                         data2 = data2,
                         drop_unused_levels = TRUE,
                         ...)
-    ## Create a table with the results.
-    write.ms.table(fit.parasite,
-                   sprintf("parasitism_%s_%s_%s_%s",
-                           species.group, paste(parasites,
-                                                collapse=""), site.lat,
-                           xvar.name))
+  
     ## Calculate r2 values
     r2 <- bayes_R2(fit.parasite)
     print(round(r2, 2))
@@ -187,15 +182,20 @@ runCombinedParasiteModels <- function(spec.data,## data
     loo.apicystis <- loo(fit.parasite, resp="ApicystisSpp")
     ## Save the model results as a rdata file
     save(fit.parasite, spec.data, r2, loo.crithidia, loo.apicystis,
-         file=sprintf("saved/parasiteFit_%s_%s_%s_%s.Rdata",
+         file=sprintf("saved/parasiteFit_%s_%s_%s.Rdata",
                       species.group, paste(parasites, collapse=""),
-                      site.lat,
                       xvar.name))
     ## Plot the residuals
-    plot.res(fit.parasite,  sprintf("%s_%s_%s_%s",
+    plot.res(fit.parasite,  sprintf("%s_%s_%s",
                                     species.group, paste(parasites,
                                                          collapse=""),
-                                    site.lat, xvar.name))
+                                    xvar.name))
+    ## Create a table with the results.
+    write.ms.table(fit.parasite,
+                   sprintf("parasitism_%s_%s_%s",
+                           species.group, paste(parasites,
+                                                collapse=""),
+                           xvar.name))
 
 
 
