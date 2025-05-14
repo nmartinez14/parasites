@@ -58,22 +58,18 @@ axis.degree <-  standardize.axis(labs.degree,
 ## ***********************************************************************
 ## bee community diversity and abundance and parasitism
 ## ***********************************************************************
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_bombus_abundance.Rdata")
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_apis_abundance_noSRDoy.Rdata")
 fit.bombus <- fit.parasite
 
 load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
 fit.bombus.apicystis <- fit.parasite
 
-load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_apis_abundance.Rdata")
-fit.apis <- fit.parasite
 
 ## Generate newdata draws
 
 bombus.cond.effects <- conditional_effects(fit.bombus)
 
 apicystis.cond.effects <- conditional_effects(fit.bombus.apicystis)
-
-apis.cond.effects <- conditional_effects(fit.apis)
 
 
 ## ***************************************************************************
@@ -208,7 +204,7 @@ parasite.dilution <- ggarrange(p3.parasite, p1.parasite, p4.parasite, p2.parasit
                             labels = c("A", "B", "C","D"), 
                             ncol = 2, nrow = 2)
 
-ggsave(parasite.dilution, file="figures/parasite_diversity.pdf", height=8, width=12)
+ggsave(parasite.dilution, file="figures/parasite_diversity.pdf", height=6, width=12)
 
 ## ***************************************************************************
 ## crithidia ~ bee abundance
@@ -298,12 +294,12 @@ ggsave(p7.parasite, file="figures/Apicystis_hbabun_bombus.pdf",
 
 
 parasite.amplification <- ggarrange(p5.parasite, p6.parasite, p7.parasite,
-                                    nrow= 1, ncol = 3, heights = 1, 
+                                    nrow= 1, ncol = 3, heights = .5, 
                                     widths = c(2, 2, 2),
                                     labels = c("A", "B", "C"))
 
 ggsave(parasite.amplification, file="figures/parasite_amplification.pdf",
-       height=4, width=10)
+       height=3, width=10)
 
 ## ***************************************************************************
 ## parasites ~ diet breadth 

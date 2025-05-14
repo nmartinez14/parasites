@@ -51,16 +51,16 @@ axis.bee.div <-  standardize.axis(labs.bee.div,
 ## ***********************************************************************
 ## bee community diversity and abundance and parasitism
 ## ***********************************************************************
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_bombus_abundance.Rdata")
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_ba_noSRDoy.Rdata")
 fit.bombus <- fit.parasite
 
 load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
 fit.bombus.apicystis <- fit.parasite
 
-load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_apis_abundance.Rdata")
+load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_apis_abundance_noFloralDiv.Rdata")
 fit.apis.apicystis <- fit.parasite
 
-load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat_diversity.Rdata")
+load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_diversity_noSRDoy.Rdata")
 fit.apis <- fit.parasite
 
 bombus.cond.effects <- conditional_effects(fit.bombus)
@@ -318,7 +318,7 @@ lat_parasite <- ggarrange(p5, p7, p6, p8,
                          heights = 1, widths = c(3, 3, 3, 3))
 
 ggsave(lat_parasite, file="figures/lat_parasites.pdf",
-       height=9, width=14)
+       height=6, width=14)
 ################################################################################
 ## Plant diversity and bee diversity
 ################################################################################
