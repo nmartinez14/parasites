@@ -146,10 +146,6 @@ run_plot_freq_model_diagnostics(remove_subset_formula(formula.flower.div),
                                 this_data=spec.net[spec.net$Weights == 1,],
                                 this_family="students", site.lat=site.or.lat)
 
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.abund),
-                                this_data=spec.net[spec.net$Weights == 1,],
-                                this_family="students", site.lat=site.or.lat)
-
 run_plot_freq_model_diagnostics(remove_subset_formula(formula.bombus.abund),
                                 this_data=spec.net[spec.net$Weights == 1,],
                                 this_family="students", site.lat=site.or.lat)
@@ -381,33 +377,3 @@ loo.apicystis.div <- loo(apis.div, resp="ApicystisSpp")
 loo.apicystis.ba <- loo(apis.ba, resp="ApicystisSpp")
 
 loo_compare(loo.apicystis.ha2, loo.apicystis.div, loo.apicystis.ba)
-
-## **********************************************************
-## save models and loo results
-## **********************************************************
-
-write.csv(rbind(loo.bombus.crithidia,
-                loo.apis.crithidia,
-                loo.bombus.apicystis,
-                loo.apis.apicystis),
-          row.names=FALSE,
-          file="saved/loo.csv")
-
-write.table(rbind(loo.bombus.crithidia,
-                  loo.apis.crithidia,
-                  loo.bombus.apicystis,
-                  loo.apis.apicystis),
-            row.names=FALSE,
-            file="saved/loo.txt", sep= " & ")
-
-save(loo.apis.apicystis,
-     loo.apis.crithidia,
-     loo.bombus.apicystis,
-     loo.bombus.crithidia,
-     fit.apis.all,
-     fit.bombus.all,
-     fit.apis.ss,
-     fit.bombus.ss,
-     fit.apis.ha,
-     fit.bombus.ba,
-     file="saved/all_models_loo.R")
