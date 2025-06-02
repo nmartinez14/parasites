@@ -1,6 +1,7 @@
 # parasites
 Analysis for understanding how natural diversity gradients influence parasite 
 prevalence in bees.
+[![DOI](https://zenodo.org/badge/920222391.svg)](https://doi.org/10.5281/zenodo.15578745)
 
 ## Repository organization  
 
