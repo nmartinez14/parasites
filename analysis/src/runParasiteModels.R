@@ -13,8 +13,6 @@ runCombinedParasiteModels <- function(spec.data,## data
                                       init=0,
                                       data2 = NULL, ## Data for the Phylogeny
                                       SEM = TRUE,
-                                      site.lat,
-                                      neg.binomial = FALSE,
                                       xvar.name,
                                       ...){
   ## Create a list with the formulas for the different parasites models
@@ -22,8 +20,6 @@ runCombinedParasiteModels <- function(spec.data,## data
                                  length=length(parasites))
   names(bf.parasite.formulas) <- parasites
   ## Create the models of the parasites using the variables provided in xvars
-  if(!neg.binomial){
-    print("binomial")
     for(parasite in parasites){
       formula.parasite  <- as.formula(paste(
         paste(parasite, "| subset(WeightsPar) + trials(1)"),
@@ -32,68 +28,8 @@ runCombinedParasiteModels <- function(spec.data,## data
         sep=" ~ "))
       bf.parasite.formulas[[parasite]] <-  bf(formula.parasite,
                                               family="beta_binomial")
-      
-      if(species.group == "bombus"){
-        freq.formula <- as.formula(paste(
-          parasite,
-          paste(xvars[-length(xvars)], ## last xvar must by the phylogeny!!!!
-                collapse=" + "),
-          sep=" ~ "))
-      } else{
-        freq.formula <- as.formula(paste(
-          parasite,
-          paste(xvars,
-                collapse=" + "),
-          sep=" ~ "))
-      }
-      
-      run_plot_freq_model_diagnostics(
-        freq.formula,
-        this_data=spec.data[spec.data$WeightsPar == 1,],
-        this_family="bernoulli",
-        site.lat=paste(site.lat, xvar.name, sep="_"),
-        species.group=species.group)
-      
-      freq.mod <- glmer(freq.formula, family="binomial",
-                        data=spec.data[spec.data$WeightsPar ==
-                                         1,],
-                        glmerControl(optimizer = "bobyqa",
-                                     optCtrl = list(maxfun = 100000)))
-      
-      
     }
-  } else{
-    print("negbinomial")
-    for(parasite in parasites){
-      formula.parasite  <- as.formula(paste(
-        paste(paste0("Sp", parasite), "|  subset(WeightsSp)"),
-        paste(c(xvars,"offset(SpScreened)"),
-              collapse=" + "),
-        sep=" ~ "))
-      bf.parasite.formulas[[parasite]] <-  bf(formula.parasite,
-                                              family="negbinomial")
-      freq.formula <- as.formula(paste(
-        paste(paste0("Sp", parasite)),
-        paste(xvars[-length(xvars)], ## last xvar must by the phylogeny!!!!
-              collapse=" + "),
-        sep=" ~ "))
-      
-      run_plot_freq_model_diagnostics(
-        freq.formula,
-        this_data=spec.data[spec.data$WeightsSp == 1,],
-        this_family="negbinomial",
-        site.lat=paste(site.lat, xvar.name, sep="_"),
-        offset="SpScreened",
-        species.group=species.group)
-      
-      freq.mod <- glmer.nb(freq.formula,
-                           data=spec.data[spec.data$WeightsSp ==
-                                            1,],
-                           glmerControl(optimizer = "bobyqa",
-                                        optCtrl = list(maxfun = 100000)))
-      
-    }}
-  
+   
   if(SEM){
     ## When there are two parasites or 1 parasite create a parasite model for each.
     ## Select the bee abundance based on the species.group.
