@@ -98,45 +98,64 @@ spec.bombus$GenusSpecies[spec.bombus$GenusSpecies %in%
 ## Parasite models set up
 ## **********************************************************
 ## phylogeny must be last in all xvar sets
-## social species abundances
-xvars.ss <-  c("Net_BeeDiversity",
-               "Net_BombusAbundance",
-               "Net_HBAbundance",
-               "rare.degree",
-               "MeanFloralDiversity",
+
+xvars.fd <-  c("MeanFloralDiversity",
+               "Year",
                "SRDoy",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## bumble bee abundance only (vif sometimes indicates HB abundance and
-## bombus abundance are colinear)
-xvars.ba <- xvars.ss[xvars.ss != "Net_HBAbundance"]
+xvars.bd <-  c("Net_BeeDiversity",
+               "Year",
+               "SRDoy",
+               "Lat","Area",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## bumble bee abundance without SRDoy
-xvars.ba.2 <- xvars.ba[xvars.ba != "SRDoy"]
+xvars.ba <-  c("Net_BombusAbundance",
+               "SRDoy", "Year",
+               "Lat","Area",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## bumble bee abundance without Area
-xvars.ba.3 <- xvars.ba[xvars.ba != "Area"]
+xvars.ba.2 <-  c("Net_BombusAbundance",
+               "SRDoy", 
+               "Lat","Area",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## honey bee abundance only (vif sometimes indicates floral diversity and
-## bombus abundance are colinear)
-xvars.ha <- xvars.ss[xvars.ss != "Net_BombusAbundance"]
+xvars.ha <-  c("Net_HBAbundance",
+               "Year",
+               "SRDoy",
+               "Lat","Area",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## honey bee abundance without SRDoy
+xvars.d <-  c("rare.degree",
+               "Year",
+               "SRDoy",
+               "Lat","Area",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.ha.2 <- xvars.ha[xvars.ha != "SRDoy"]
+xvars.l <-  c("Lat",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## honey bee abundance without mean floral diversity
+xvars.a <-  c("Area",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.ha.3 <- xvars.ha[xvars.ha != "MeanFloralDiversity"]
+xvars.sr <-  c("SRDoy",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-## diversity only
-xvars.div <- xvars.ss[!xvars.ss %in%
-                        c("Net_HBAbundance", "Net_BombusAbundance")]
-## diversity only - 
-xvars.div.2 <- xvars.ss[!xvars.ss %in%
-                        c("Net_HBAbundance", "Net_BombusAbundance", "SRDoy")]
+xvars.y <-  c("Year",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
+
+
 
 ## **********************************************************
 ## community model, check assumptions first before adding parasites
@@ -171,68 +190,92 @@ table(spec.bombus$ApicystisSpp[spec.bombus$WeightsPar ==1 ])
 ## diagnostics. Bayesian models are beta binomial, frequentist are
 ## binomial because there are no packages that include beta binomial
 
-xvar.order <- c("social_species",
-                "bombus_abundance",
-                "apis_abundance",
-                "diversity")
 
-## social species abundance as x var
-bombus.ss <- runCombinedParasiteModels(spec.data= spec.bombus,
+bombus.fd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
-                                       xvars=xvars.ss,
+                                       xvars=xvars.fd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name=xvar.order[1])
+                                       xvar.name="floral_div", 
+                                       site.lat = "lat")
 
-
-## HB and bombus abundance are colinear in crithidia model
-
-## bombus abundance only
-bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
+bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
-                                       xvars=xvars.ba,
+                                       xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       site.lat = site.or.lat,
-                                       xvar.name=xvar.order[2])
-## bombus abundance without SRDoy
-bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                       xvar.name="bee_div", 
+                                       site.lat = "lat")
+
+## For Critihidia: bombus abundance is collinear with year. I've ran individual 
+## models for each parasite to account for this and remove year in the Crithidia.
+
+bombus.ba.a <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                         species.group="bombus",
+                                         parasites= "ApicystisSpp",
+                                         xvars=xvars.ba,
+                                         ncores=ncores,
+                                         data2= list(phylo_matrix=phylo_matrix),
+                                         xvar.name="bombus_abund", 
+                                         site.lat = "lat")
+
+bombus.ba.c <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
+                                       parasites = "CrithidiaPresence",
                                        xvars=xvars.ba.2,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       site.lat = site.or.lat,
-                                       xvar.name= "ba_noSRDoy")
+                                       xvar.name="bombus_abund", 
+                                       site.lat = "lat")
 
-## apis abundance only
+
 bombus.ha <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.ha,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       site.lat = site.or.lat,
-                                       xvar.name=xvar.order[3])
-## For Crithidia bee div collinear with SRDOY(not quite VIF > 5)
+                                       xvar.name="hb_abund", 
+                                       site.lat = "lat")
 
-## apis abundance without SRDoy
-bombus.ha <- runCombinedParasiteModels(spec.data= spec.bombus,
+bombus.d <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
-                                       xvars=xvars.ha.2,
+                                       xvars=xvars.d,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       site.lat = site.or.lat,
-                                       xvar.name="ha_noSRDoy")
+                                       xvar.name="degree", 
+                                      site.lat = "lat")
 
-## no abundances, just bee diversity 
-bombus.div <- runCombinedParasiteModels(spec.data= spec.bombus,
+bombus.l <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
-                                       xvars=xvars.div,
+                                       xvars=xvars.l,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       site.lat=site.or.lat,
-                                       xvar.name=xvar.order[4])
+                                       xvar.name="lat", 
+                                      site.lat = "lat")
 
+bombus.a <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                      species.group="bombus",
+                                      xvars=xvars.a,
+                                      ncores=ncores,
+                                      data2= list(phylo_matrix=phylo_matrix),
+                                      xvar.name="area", 
+                                      site.lat = "lat")
 
+bombus.sr <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                      species.group="bombus",
+                                      xvars=xvars.sr,
+                                      ncores=ncores,
+                                      data2= list(phylo_matrix=phylo_matrix),
+                                      xvar.name="SRDOY", 
+                                      site.lat = "lat")
+
+bombus.y <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                      species.group="bombus",
+                                      xvars=xvars.y,
+                                      ncores=ncores,
+                                      data2= list(phylo_matrix=phylo_matrix),
+                                      xvar.name="year", 
+                                      site.lat = "lat")
 
 ## **********************************************************
 ## Bombus loo summaries
@@ -280,70 +323,168 @@ loo_compare(loo.apicystis.ss,loo.apicystis.ba, loo.apicystis.ha)
 table(spec.apis$CrithidiaPresence[spec.apis$WeightsPar == 1])
 table(spec.apis$ApicystisSpp[spec.apis$WeightsPar ==1 ])
 
+xvars.fd <-  c("MeanFloralDiversity",
+               "Year",
+               "SRDoy",
+               "Lat","Area",
+               "(1|Site)")
 
-xvar.order <- c("social_species",
-                "apis_abundance",
-                "bombus_abundance",
-                "diversity")
+xvars.fd.2 <-  c("MeanFloralDiversity",
+               "Year",
+               "Area",
+               "(1|Site)")
 
-## social species abundance as x var
-apis.ss <- runCombinedParasiteModels(spec.data= spec.apis,
+xvars.bd <-  c("Net_BeeDiversity",
+               "Area",
+               "(1|Site)")
+
+xvars.bd.2 <-  c("Net_BeeDiversity",
+               "Year",
+               "SRDoy",
+               "Area",
+               "(1|Site)")
+
+xvars.ba <-  c("Net_BombusAbundance",
+               "Year",
+               "SRDoy",
+               "Area",
+               "(1|Site)")
+
+xvars.ha <-  c("Net_HBAbundance",
+               "Year",
+               "SRDoy",
+               "Lat","Area",
+               "(1|Site)")
+
+xvars.ha.2 <-  c("Net_HBAbundance",
+               "Year",
+               "SRDoy",
+               "Area",
+               "(1|Site)")
+
+xvars.d <-  c("rare.degree",
+              "Year",
+              "SRDoy",
+              "Lat","Area",
+              "(1|Site)")
+
+xvars.d.2 <-  c("rare.degree",
+              "SRDoy","Area",
+              "(1|Site)")
+
+xvars.l <-  c("Lat",
+              "(1|Site)")
+
+xvars.a <-  c("Area",
+              "(1|Site)")
+
+xvars.sr <-  c("SRDoy",
+               "(1|Site)")
+
+xvars.y <-  c("Year",
+              "(1|Site)")
+
+## Ran split the parasite models based on appropriate noncolinear variables
+
+apis.fd.a <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.ss[-length(xvars.ss)],
+                                     parasites = "ApicystisSpp",
+                                     xvars=xvars.fd,
                                      ncores=ncores,
                                      site.lat = site.or.lat,
-                                     xvar.name=xvar.order[1])
-## Multiple variables are collinear for both parasites, so not a valid model
+                                     xvar.name= "floral_div")
 
-## apis abundance
-apis.ha <- runCombinedParasiteModels(spec.data= spec.apis,
+apis.fd.c <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.ha[-length(xvars.ha)],
+                                     parasites = "CrithidiaPresence",
+                                     xvars=xvars.fd.2,
                                      ncores=ncores,
                                      site.lat = site.or.lat,
-                                     xvar.name=xvar.order[2])
-## Multiple variables are collinear for both parasites, so not a valid model
+                                     xvar.name= "floral_div")
 
-## apis abundance - floral diversity
-apis.ha <- runCombinedParasiteModels(spec.data= spec.apis,
+apis.bd.a <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.ha.3[-length(xvars.ha.3)],
+                                     parasites= "ApicystisSpp",
+                                     xvars=xvars.bd,
                                      ncores=ncores,
                                      site.lat = site.or.lat,
-                                     xvar.name="ha_noFloralDiv")
+                                     xvar.name= "bee_div")
 
-## bombus abundance
+apis.bd.c <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     parasites = "CrithidiaPresence",
+                                     xvars=xvars.bd.2,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "bee_div")
+
 apis.ba <- runCombinedParasiteModels(spec.data= spec.apis,
-                                      species.group="apis",
-                                      xvars=xvars.ba[-length(xvars.ba)],
-                                      ncores=ncores,
-                                     site.lat = site.or.lat,
-                                      xvar.name=xvar.order[3])
-## All variables collinear for crithidia. 
-## For apicystis lat, area and bombus abundance collinear
-## bombus abundance without area
-apis.ba <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.ba.3[-length(xvars.ba.3)],
+                                     xvars=xvars.ba,
                                      ncores=ncores,
                                      site.lat = site.or.lat,
-                                     xvar.name="ba_noArea")
+                                     xvar.name= "bombus_abund")
 
-## no abundances, just diversity 
-apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
-                                      species.group="apis",
-                                      xvars=xvars.div[-length(xvars.div)],
-                                      ncores=ncores,
-                                      site.lat = site.or.lat,
-                                      xvar.name=xvar.order[4])
-## For Crithida model floral diversity/Lat/SRDoy collinear.
-## just diversity without SRDoy
-apis.div <- runCombinedParasiteModels(spec.data= spec.apis,
-                                      species.group="apis",
-                                      xvars=xvars.div.2[-length(xvars.div.2)],
-                                      ncores=ncores,
-                                      site.lat = site.or.lat,
-                                      xvar.name="div_noSRDoy")
+apis.ha.a <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     parasites = "ApicystisSpp",
+                                     xvars=xvars.ha,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "ha_abund")
+
+apis.ha.c <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     parasites = "CrithidiaPresence",
+                                     xvars=xvars.ha.2,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "ha_abund")
+
+apis.d.a <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     parasites = "ApicystisSpp",
+                                     xvars=xvars.d,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "degree")
+
+apis.d.c <- runCombinedParasiteModels(spec.data= spec.apis,
+                                    species.group="apis",
+                                    parasites = "CrithidiaPresence",
+                                    xvars=xvars.d.2,
+                                    ncores=ncores,
+                                    site.lat = site.or.lat,
+                                    xvar.name= "degree")
+
+apis.l <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     xvars=xvars.l,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "lat")
+
+apis.a <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     xvars=xvars.a,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "area")
+
+apis.sr <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     xvars=xvars.sr,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "SRDOY")
+
+apis.y <- runCombinedParasiteModels(spec.data= spec.apis,
+                                     species.group="apis",
+                                     xvars=xvars.y,
+                                     ncores=ncores,
+                                     site.lat = site.or.lat,
+                                     xvar.name= "year")
+
 
 ## **********************************************************
 ## Apis loo summaries
