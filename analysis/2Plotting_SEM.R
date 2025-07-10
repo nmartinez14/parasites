@@ -58,25 +58,22 @@ axis.degree <-  standardize.axis(labs.degree,
 ## ***********************************************************************
 ## bee community diversity and abundance and parasitism
 ## ***********************************************************************
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_apis_abundance_noSRDoy.Rdata")
-fit.bombus <- fit.parasite
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_floral_div.Rdata")
+fit.bombus.fd <- fit.parasite
 
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
-fit.bombus.apicystis <- fit.parasite
 
 
 ## Generate newdata draws
 
-bombus.cond.effects <- conditional_effects(fit.bombus)
+cond.effects <- conditional_effects(fit.bombus.fd)
 
-apicystis.cond.effects <- conditional_effects(fit.bombus.apicystis)
 
 
 ## ***************************************************************************
 ## Crithidia ~ bee diversity
 
 crithidia_beediv <-
-  bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_Net_BeeDiversity"]]
+  cond.effects[["CrithidiaPresence.CrithidiaPresence_Net_BeeDiversity"]]
 
 p1.parasite <- ggplot(crithidia_beediv, aes(x = Net_BeeDiversity, 
                                             y= estimate__)) +
@@ -137,7 +134,7 @@ ggsave(p2.parasite, file="figures/parasite_beediv_Apicystis.pdf",
 ## ***************************************************************************
 ## Crithidia ~ floral diversity
 
-crithidia_floraldiv <-bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_MeanFloralDiversity"]]
+crithidia_floraldiv <-cond.effects[["CrithidiaPresence.CrithidiaPresence_MeanFloralDiversity"]]
 
 
 p3.parasite <- ggplot(crithidia_floraldiv, aes(x = MeanFloralDiversity, 
@@ -170,7 +167,7 @@ ggsave(p3.parasite, file="figures/parasite_floraldiv_Crithidia.pdf",
 ## Apicystis ~ floral diversity
 
 apicystis_floraldiv <- 
-  apicystis.cond.effects[["ApicystisSpp.ApicystisSpp_MeanFloralDiversity"]]
+  cond.effects[["ApicystisSpp.ApicystisSpp_MeanFloralDiversity"]]
 
 
 p4.parasite <- ggplot(apicystis_floraldiv, aes(x = MeanFloralDiversity, 
