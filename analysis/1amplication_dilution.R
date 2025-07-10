@@ -69,6 +69,7 @@ spec.net$Site <- as.character(spec.net$Site)
 spec.net$Year <- as.character(spec.net$Year)
 spec.net$GenusSpecies <- as.character(spec.net$GenusSpecies)
 
+
 ## bombus only data
 spec.bombus <- makeGenusSubset(spec.net, "Bombus")
 ## apis only data
@@ -183,16 +184,14 @@ bombus.fd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        xvars=xvars.fd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="floral_div", 
-                                       site.lat = "lat")
+                                       xvar.name="floral_div")
 
 bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="bee_div", 
-                                       site.lat = "lat")
+                                       xvar.name="bee_div")
 
 
 bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
@@ -200,104 +199,50 @@ bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
                                          xvars=xvars.ba,
                                          ncores=ncores,
                                          data2= list(phylo_matrix=phylo_matrix),
-                                         xvar.name="bombus_abund", 
-                                         site.lat = "lat")
+                                         xvar.name="bombus_abund")
 
 bombus.ha <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.ha,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="hb_abund", 
-                                       site.lat = "lat")
+                                       xvar.name="hb_abund")
 
 bombus.d <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.d,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="degree", 
-                                      site.lat = "lat")
+                                       xvar.name="degree")
 
 bombus.l <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.l,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="lat", 
-                                      site.lat = "lat")
+                                       xvar.name="lat")
 
 bombus.a <- runCombinedParasiteModels(spec.data= spec.bombus,
                                       species.group="bombus",
                                       xvars=xvars.a,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="area", 
-                                      site.lat = "lat")
+                                      xvar.name="area")
 
 bombus.sr <- runCombinedParasiteModels(spec.data= spec.bombus,
                                       species.group="bombus",
                                       xvars=xvars.sr,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="SRDOY", 
-                                      site.lat = "lat")
+                                      xvar.name="SRDOY")
 
 bombus.y <- runCombinedParasiteModels(spec.data= spec.bombus,
                                       species.group="bombus",
                                       xvars=xvars.y,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="year", 
-                                      site.lat = "lat")
+                                      xvar.name="year")
 
-
-## **********************************************************
-## Apis predictor variables
-## **********************************************************
-
-xvars.fd <-  c("MeanFloralDiversity",
-               "Year",
-               "SRDoy",
-               "Lat","Area",
-               "(1|Site)")
-
-
-xvars.bd <-  c("Net_BeeDiversity",
-               "Year",
-               "SRDoy",
-               "Area",
-               "(1|Site)")
-
-xvars.ba <-  c("Net_BombusAbundance",
-               "Year",
-               "SRDoy",
-               "Area",
-               "(1|Site)")
-
-xvars.ha <-  c("Net_HBAbundance",
-               "Year",
-               "SRDoy",
-               "Lat","Area",
-               "(1|Site)")
-
-xvars.d <-  c("rare.degree",
-              "Year",
-              "SRDoy",
-              "Lat","Area",
-              "(1|Site)")
-
-xvars.l <-  c("Lat",
-              "(1|Site)")
-
-xvars.a <-  c("Area",
-              "(1|Site)")
-
-xvars.sr <-  c("SRDoy",
-               "(1|Site)")
-
-xvars.y <-  c("Year",
-              "(1|Site)")
 
 ## **********************************************************
 ## Parasite presence
@@ -307,56 +252,56 @@ xvars.y <-  c("Year",
 
 apis.fd <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.fd,
+                                     xvars=xvars.fd[-length(xvars.fd)],
                                      ncores=ncores,
                                      xvar.name= "floral_div")
 
 
 apis.bd <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.bd,
+                                     xvars=xvars.bd[-length(xvars.bd)],
                                      ncores=ncores,
                                      xvar.name= "bee_div")
 
 apis.ba <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.ba,
+                                     xvars=xvars.ba[-length(xvars.ba)],
                                      ncores=ncores,
                                      xvar.name= "bombus_abund")
 
 apis.ha <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.ha,
+                                     xvars=xvars.ha[-length(xvars.ha)],
                                      ncores=ncores,
                                      xvar.name= "ha_abund")
 
 apis.d <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.d,
+                                     xvars=xvars.d[-length(xvars.d)],
                                      ncores=ncores,
                                      xvar.name= "degree")
 
 apis.l <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.l,
+                                     xvars=xvars.l[-length(xvars.l)],
                                      ncores=ncores,
                                      xvar.name= "lat")
 
 apis.a <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.a,
+                                     xvars=xvars.a[-length(xvars.a)],
                                      ncores=ncores,
                                      xvar.name= "area")
 
 apis.sr <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.sr,
+                                     xvars=xvars.sr[-length(xvars.sr)],
                                      ncores=ncores,
                                      xvar.name= "SRDOY")
 
 apis.y <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.y,
+                                     xvars=xvars.y[-length(xvars.y)],
                                      ncores=ncores,
                                      xvar.name= "year")
 
