@@ -49,6 +49,7 @@ axis.bee.div <-  standardize.axis(labs.bee.div,
 
 ## use all the species data or just bombus? 
 bombus.par <- spec.orig[spec.orig$WeightsPar==1 & spec.orig$Genus == "Bombus", ]
+apis.par <- spec.orig[spec.orig$WeightsPar==1 & spec.orig$Genus == "Apis", ]
 ## rare.degree (logged)
 labs.degree <- (pretty(bombus.par$rare.degree, n=10))
 axis.degree <-  standardize.axis(labs.degree,
@@ -87,7 +88,6 @@ p1.parasite <- ggplot(crithidia_beediv, aes(x = Net_BeeDiversity,
        fill = "Credible interval") +
   theme_ms() +
   #theme(legend.position = "bottom") +
-  guides(color = F, fill = F)+
   scale_x_continuous(
     breaks = axis.bee.div,
     labels =  labs.bee.div) +
@@ -157,7 +157,7 @@ p3.parasite <- ggplot(crithidia_floraldiv, aes(x = MeanFloralDiversity,
           axis.title.y = element_text(size=16),
           text = element_text(size=16)) +
   geom_jitter(data=spec.uni,
-              aes(y= ApicystisParasitismRate, x=MeanFloralDiversity,
+              aes(y= CrithidiaParasitismRate, x=MeanFloralDiversity,
               ), width=0.05)
 
 ggsave(p3.parasite, file="figures/parasite_floraldiv_Crithidia.pdf",

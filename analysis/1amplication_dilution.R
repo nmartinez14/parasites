@@ -68,7 +68,10 @@ spec.net$Site <- as.character(spec.net$Site)
 ## otherwise levels with no data are not properly dropped using subset
 spec.net$Year <- as.character(spec.net$Year)
 spec.net$GenusSpecies <- as.character(spec.net$GenusSpecies)
-
+spec.net$YearPar <- factor(spec.net$Year)
+spec.net$YearPar[!spec.net$WeightsPar] <- NA  # keep only years where parasite data was collected
+spec.net$YearPar <- droplevels(spec.net$YearPar)
+spec.net$YearPar <- as.character(spec.net$YearPar)
 
 ## bombus only data
 spec.bombus <- makeGenusSubset(spec.net, "Bombus")
@@ -122,35 +125,35 @@ run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.div),
 ## phylogeny must be last in all xvar sets
 
 xvars.fd <-  c("MeanFloralDiversity",
-               "Year",
+               "YearPar",
                "SRDoy",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.bd <-  c("Net_BeeDiversity",
-               "Year",
+               "YearPar",
                "SRDoy",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.ba <-  c("Net_BombusAbundance",
-               "SRDoy", "Year",
+               "SRDoy", "YearPar",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 
 xvars.ha <-  c("Net_HBAbundance",
-               "Year",
+               "YearPar",
                "SRDoy",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.d <-  c("rare.degree",
-               "Year",
+               "YearPar",
                "SRDoy",
                "Lat","Area",
                "(1|Site)",
@@ -168,7 +171,7 @@ xvars.sr <-  c("SRDoy",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.y <-  c("Year",
+xvars.y <-  c("YearPar",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
