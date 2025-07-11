@@ -48,32 +48,21 @@ axis.bee.div <-  standardize.axis(labs.bee.div,
                                   spec.uni.orig$Net_BeeDiversity)
 
 
-## ***********************************************************************
-## bee community diversity and abundance and parasitism
-## ***********************************************************************
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_ba_noSRDoy.Rdata")
-fit.bombus <- fit.parasite
+## ***************************************************************************
+# Load model for latitude
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat.Rdata")
+fit.bombus.l <- fit.parasite
 
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat_social_species.Rdata")
-fit.bombus.apicystis <- fit.parasite
+## Generate newdata draws
+cond.effects <- conditional_effects(fit.bombus.l)
 
-load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_apis_abundance_noFloralDiv.Rdata")
-fit.apis.apicystis <- fit.parasite
-
-load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_diversity_noSRDoy.Rdata")
-fit.apis <- fit.parasite
-
-bombus.cond.effects <- conditional_effects(fit.bombus)
-apicystis.cond.effects <- conditional_effects(fit.bombus.apicystis)
-apis.cond.effects <- conditional_effects(fit.apis)
-apis.api.cond.effects <- conditional_effects(fit.apis.apicystis)
 ## Community level visuals
 ## ***********************************************************************
 ## bee community diversity and latitude
 ## ***********************************************************************
 
 lat_beediv <-
-  bombus.cond.effects[["NetBeeDiversity.NetBeeDiversity_Lat"]]
+  cond.effects[["NetBeeDiversity.NetBeeDiversity_Lat"]]
 
 p1 <- ggplot(lat_beediv, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
@@ -103,7 +92,7 @@ ggsave(p1, file="figures/Lat_beediv.pdf",
 ################################################################################
 
 lat_floraldiv <-
-  bombus.cond.effects[["MeanFloralDiversity.MeanFloralDiversity_Lat"]]
+  cond.effects[["MeanFloralDiversity.MeanFloralDiversity_Lat"]]
 
 p2 <- ggplot(lat_floraldiv, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
@@ -137,13 +126,13 @@ ggsave(p2, file="figures/Lat_floraldiv.pdf",
 ################################################################################
 
 lat_bombusabund <-
-  bombus.cond.effects[["NetBombusAbundance.NetBombusAbundance_Lat"]]
+  cond.effects[["NetBombusAbundance.NetBombusAbundance_Lat"]]
 
 
 p3 <- ggplot(lat_bombusabund, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
-  labs(x = "Latitude (log)", y = "Bombus abundance (log)",
+  labs(x = "Latitude (log)", y = "Bombus abundance(log)",
        fill = "Credible interval") +
   theme_ms() +
   #theme(legend.position = "bottom") +
@@ -155,18 +144,17 @@ p3 <- ggplot(lat_bombusabund, aes(x = Lat, y = estimate__)) +
     labels =  labs.bombus.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
+        axis.title.y = element_text(size=14),
         text = element_text(size=16)) +
   ##theme_dark_black()+
   geom_point(data=spec.uni,
              aes(y= Net_BombusAbundance, x=Lat), cex=2)
 
-ggsave(p3, file="figures/Lat_bombus_abudance.pdf",
-       height=4, width=5)
+
 
 ## Honeybee abundance
 lat_apisabund <-
-  bombus.cond.effects[["NetHBAbundance.NetHBAbundance_Lat"]]
+  cond.effects[["NetHBAbundance.NetHBAbundance_Lat"]]
 
 p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
@@ -183,14 +171,13 @@ p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
     labels =  labs.HB.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
+        axis.title.y = element_text(size=15),
         text = element_text(size=16)) +
   ##theme_dark_black()+
   geom_point(data=spec.uni,
              aes(y= Net_HBAbundance, x=Lat), cex=2)
 
-ggsave(p4, file="figures/Lat_HB_abudance.pdf",
-       height=4, width=5)
+
 
 lat_community <- ggarrange(p2,p1,p3,p4, #plots that are going to be included in this multipanel figure
                        labels = c("A", "B", "C","D"), #labels given each panel 
@@ -204,12 +191,12 @@ ggsave(lat_community, file="figures/lat_community.pdf",
 ## ***********************************************************************
 
 crithidia_lat <-
-  bombus.cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
+  cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
 
 p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__),
-              alpha=0.4, fill = "#3182bd") +
+              alpha=0.4) +
   scale_fill_manual(labels ="Bombus 0.95") +
   labs(x = "Latitude (log)", y = "Crithidia prevalence") +
   theme_ms() +
@@ -232,11 +219,11 @@ p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
 ## ***********************************************************************
 
 apicystis_lat <-
-  apicystis.cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
+  cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
 
 p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "darkgoldenrod3") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "darkgoldenrod3",
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd",
               alpha=0.4) +
   scale_fill_manual(labels ="Bombus 0.95") +
   labs(x = "Latitude (log)", y = "Apicystis prevalence",
@@ -257,14 +244,22 @@ p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
 
 ################################################################################
 ## crithida ~ lat in Apis
+## ***************************************************************************
+# Load model for lat
+load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat.Rdata")
+fit.apis.l <- fit.parasite
+
+## Generate newdata draws
+cond.effects <- conditional_effects(fit.apis.l)
+
 crithidia_lat_apis <-
-  apis.cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
+  cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
 
 p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size= 1.5, 
-            linetype = "dotdash", color = "darkgoldenrod3") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, 
-              fill = "darkgoldenrod3") +
+            linetype = "dotdash") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4 
+              ) +
   scale_fill_manual(labels ="Apis 0.95") +
   labs(x = "Latitude (log)", y = "Crithidia prevalence") +
   theme_ms() +
@@ -286,13 +281,13 @@ p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
 ## Lat and apicystis in apis
 ################################################################################
 apicystis_lat_apis <-
-  apis.api.cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
+  cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
 
 p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            linetype = "dotdash") +
+            linetype = "dotdash", color = "darkgoldenrod3") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4) +
+              alpha=0.4, fill = "darkgoldenrod3") +
   scale_fill_manual(labels ="Apis 0.95") +
   labs(x = "Latitude (log)", y = "Apicystis prevalence",
        fill = "Credible interval") +
@@ -323,7 +318,7 @@ ggsave(lat_parasite, file="figures/lat_parasites.pdf",
 ## Plant diversity and bee diversity
 ################################################################################
 beediv_floraldiv <-
-  bombus.cond.effects[["NetBeeDiversity.NetBeeDiversity_MeanFloralDiversity"]]
+  cond.effects[["NetBeeDiversity.NetBeeDiversity_MeanFloralDiversity"]]
 
 plantdiv_beediv <- ggplot(beediv_floraldiv, aes(x = MeanFloralDiversity, 
                                                 y = estimate__)) +
