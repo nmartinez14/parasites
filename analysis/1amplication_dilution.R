@@ -22,8 +22,7 @@ vars_yearsr <- c("MeanFloralDiversity",
                  "Net_BeeAbundance",
                  "Net_BombusAbundance",
                  "Net_HBAbundance",
-                 "SRDoyPoly1",
-                 "SRDoyPoly2"
+                 "Cumulative_Precip"
                  )
 vars_yearsrsp <- "rare.degree"
 vars_site <- c("Lat", "Area")
@@ -58,27 +57,17 @@ dim(spec.net)
 spec.orig <- prepDataSEM(spec.net, variables.to.log, variables.to.log.1,
                          standardize=FALSE)
 
-## Make SEM weights and standardize data.
+## Make SEM weights
 spec.net <- prepDataSEM(spec.net, variables.to.log, variables.to.log.1,
-                        vars_yearsr = vars_yearsr,
-                        vars_yearsrsp = vars_yearsrsp,
-                        vars_site=vars_site)
+                        standardize = FALSE)
 
 spec.net$Site <- as.character(spec.net$Site)
 ## otherwise levels with no data are not properly dropped using subset
 spec.net$Year <- as.character(spec.net$Year)
 spec.net$GenusSpecies <- as.character(spec.net$GenusSpecies)
-spec.net$YearPar <- factor(spec.net$Year)
-spec.net$YearPar[!spec.net$WeightsPar] <- NA  # keep only years where parasite data was collected
-spec.net$YearPar <- droplevels(spec.net$YearPar)
-spec.net$YearPar <- as.character(spec.net$YearPar)
 
-## bombus only data
-spec.bombus <- makeGenusSubset(spec.net, "Bombus")
-## apis only data
-spec.apis <- makeGenusSubset(spec.net, "Apis")
-## can repeat for other genera but have deleted since the models do
-## not converge
+spec.net$BombusWeights <- ifelse(spec.net$Apidae == 1 & spec.net$Genus == "Bombus", 1, 0)
+spec.net$ApisWeights <- ifelse(spec.net$Apidae == 1 & spec.net$Genus == "Apis", 1, 0)
 
 ## define all the formulas for the different parts of the models
 source("src/plant_poll_models.R")
@@ -94,8 +83,8 @@ not_in_phylo <- unique(spec.net$GenusSpecies[!spec.net$GenusSpecies
                                              %in%
                                              phylo$tip.label])
 
-## only bombus model is muti species given the others do not converge
-spec.bombus$GenusSpecies[spec.bombus$GenusSpecies %in%
+## only bombus model is multi species given the others do not converge
+spec.net$GenusSpecies[spec.net$GenusSpecies %in%
                          not_in_phylo]<- "Agapostemon angelicus"
 ## **********************************************************
 ## community model, check assumptions first before adding parasites
@@ -125,36 +114,34 @@ run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.div),
 ## phylogeny must be last in all xvar sets
 
 xvars.fd <-  c("MeanFloralDiversity",
-               "YearPar",
-               "SRDoy",
+               "Cumulative_Precip",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.bd <-  c("Net_BeeDiversity",
-               "YearPar",
-               "SRDoy",
+               "Cumulative_Precip",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.ba <-  c("Net_BombusAbundance",
-               "SRDoy", "YearPar",
+               "MeanFloralDiversity",
+               "Cumulative_Precip",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 
 xvars.ha <-  c("Net_HBAbundance",
-               "YearPar",
-               "SRDoy",
+               "MeanFloralDiversity",
+               "Cumulative_Precip",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.d <-  c("rare.degree",
-               "YearPar",
-               "SRDoy",
+              "Cumulative_Precip",
                "Lat","Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
@@ -167,11 +154,9 @@ xvars.a <-  c("Area",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.sr <-  c("SRDoy",
-               "(1|Site)",
-               "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.y <-  c("YearPar",
+xvars.cp <-  c("Cumulative_Precip",
+               "Lat",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
@@ -181,22 +166,63 @@ xvars.y <-  c("YearPar",
 ## **********************************************************
 ## Bombus
 ## **********************************************************
+## floral diversity
+mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
+                                       xvars=xvars.fd,
+                                       ncores=ncores,
+                                       data2= list(phylo_matrix=phylo_matrix),
+                                       xvar.name="floral_div",
+                                       top.level = "lat")
+
+mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
+                                       xvars=xvars.fd,
+                                       ncores=ncores,
+                                       data2= list(phylo_matrix=phylo_matrix),
+                                       xvar.name="floral_div",
+                                       top.level = "cp")
 
 bombus.fd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.fd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="floral_div")
+                                       xvar.name="floral_div",
+                                       top.level = "area")
+## bee diversity
 
 bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        species.group="bombus",
                                        xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="bee_div")
+                                       xvar.name="bee_div",
+                                       top.level = "lat")
 
+bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                       species.group="bombus",
+                                       xvars=xvars.bd,
+                                       ncores=ncores,
+                                       data2= list(phylo_matrix=phylo_matrix),
+                                       xvar.name="bee_div",
+                                       top.level = "cp")
 
+bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                       species.group="bombus",
+                                       xvars=xvars.bd,
+                                       ncores=ncores,
+                                       data2= list(phylo_matrix=phylo_matrix),
+                                       xvar.name="bee_div",
+                                       top.level = "area")
+
+bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
+                                       species.group="bombus",
+                                       xvars=xvars.bd,
+                                       ncores=ncores,
+                                       data2= list(phylo_matrix=phylo_matrix),
+                                       xvar.name="bee_div",
+                                       top.level = "fd")
+
+## bombus abundance
 bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
                                          species.group="bombus",
                                          xvars=xvars.ba,
@@ -232,19 +258,13 @@ bombus.a <- runCombinedParasiteModels(spec.data= spec.bombus,
                                       data2= list(phylo_matrix=phylo_matrix),
                                       xvar.name="area")
 
-bombus.sr <- runCombinedParasiteModels(spec.data= spec.bombus,
+bombus.cp <- runCombinedParasiteModels(spec.data= spec.bombus,
                                       species.group="bombus",
-                                      xvars=xvars.sr,
+                                      xvars=xvars.cp,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="SRDOY")
+                                      xvar.name="cp")
 
-bombus.y <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                      species.group="bombus",
-                                      xvars=xvars.y,
-                                      ncores=ncores,
-                                      data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="year")
 
 
 ## **********************************************************
@@ -296,15 +316,10 @@ apis.a <- runCombinedParasiteModels(spec.data= spec.apis,
                                      ncores=ncores,
                                      xvar.name= "area")
 
-apis.sr <- runCombinedParasiteModels(spec.data= spec.apis,
+apis.cp <- runCombinedParasiteModels(spec.data= spec.apis,
                                      species.group="apis",
-                                     xvars=xvars.sr[-length(xvars.sr)],
+                                     xvars=xvars.cp[-length(xvars.cp)],
                                      ncores=ncores,
-                                     xvar.name= "SRDOY")
+                                     xvar.name= "cp")
 
-apis.y <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.y[-length(xvars.y)],
-                                     ncores=ncores,
-                                     xvar.name= "year")
 
