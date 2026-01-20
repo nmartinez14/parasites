@@ -46,9 +46,7 @@ axis.HB.abund <-  standardize.axis(labs.HB.abund, spec.uni.orig$Net_HBAbundance)
 ## bombus abund (logged + 1)
 labs.bombus.abund <- (pretty(c(spec.uni.orig$Net_BombusAbundance), n=5))
 axis.bombus.abund <-  standardize.axis(labs.bombus.abund, spec.uni.orig$Net_BombusAbundance)
-## all bee abund (logged)
-labs.bee.abund <- (pretty(c(spec.uni.orig$Net_BeeAbundance), n=5))
-axis.bee.abund <-  standardize.axis(labs.bee.abund, spec.uni.orig$Net_BeeAbundance)
+
 ## bee diversity (not logged)
 labs.bee.div <- (pretty(c(spec.uni.orig$Net_BeeDiversity), n=5))
 axis.bee.div <-  standardize.axis(labs.bee.div,
@@ -61,10 +59,11 @@ apis.par <- spec.orig[spec.orig$WeightsPar==1 & spec.orig$Genus == "Apis", ]
 labs.degree <- (pretty(bombus.par$rare.degree, n=10))
 axis.degree <-  standardize.axis(labs.degree,
                                   bombus.par$rare.degree)
+
 ## ***************************************************************************
 # Load model for bee diversity
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_bee_div.Rdata")
-fit.bombus.bd <- fit.parasite
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bee_div_lat.Rdata")
+fit.bombus.bd <- fit.parasite.bombus
 
 ## Generate newdata draws
 
@@ -84,21 +83,18 @@ p1.parasite <- ggplot(crithidia_beediv, aes(x = Net_BeeDiversity,
               alpha=0.4)+
   labs(x = "Bee diversity", y = "Crithidia prevalence",
        fill = "Credible interval") +
-  theme_dark_black() +
-  #theme_ms() +
+  #theme_dark_black() +
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.bee.div,
-    labels =  labs.bee.div) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16))
-  # geom_jitter(data=spec.uni,
-  #             aes(y= CrithidiaParasitismRate, x=Net_BeeDiversity,
-  #             color = SiteScreened),   
-  #             width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+        text = element_text(size=16))+
+  geom_jitter(data=spec.uni,
+              aes(y= CrithidiaParasitismRate, x=Net_BeeDiversity,
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 ################################################################################
@@ -110,30 +106,28 @@ apicystis_beediv <-cond.effects[["ApicystisSpp.ApicystisSpp_Net_BeeDiversity"]]
 p2.parasite <- ggplot(apicystis_beediv, aes(x = Net_BeeDiversity, 
                                             y = estimate__)) +
   geom_line(aes(x = Net_BeeDiversity, y= estimate__), 
-            linewidth = 1.5, color = "grey80") +
+            linewidth = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__),
-               alpha=0.4, fill = "grey80")+
+               alpha=0.2)+
   labs(x = "Bee diversity", y = "Apicystis prevalence") +
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.bee.div,
-    labels =  labs.bee.div) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16))
-  # geom_jitter(data=spec.uni,
-  #             aes(y= ApicystisParasitismRate, x=Net_BeeDiversity,
-  #             color = SiteScreened), width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+        text = element_text(size=16))+
+  geom_jitter(data=spec.uni,
+              aes(y= ApicystisParasitismRate, x=Net_BeeDiversity,
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 ## ***************************************************************************
 # Load model for floral diversity
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_floral_div.Rdata")
-fit.bombus.fd <- fit.parasite
+load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_floral_div_lat.Rdata")
+fit.bombus.fd <- fit.parasite.bombus
 
 ## Generate newdata draws
 
@@ -153,20 +147,18 @@ p3.parasite <- ggplot(crithidia_floraldiv, aes(x = MeanFloralDiversity,
   geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd",
               alpha=0.4) +
     labs(x = "Floral diversity", y = "Crithidia prevalence") +
-    theme_dark_black() +
-  #theme_ms() +
+    #theme_dark_black() +
+  theme_ms() +
     #theme(legend.position = "bottom") +
-    scale_x_continuous(
-        breaks = axis.flower.div,
-        labels =  labs.flower.div) +
     theme(axis.title.x = element_blank(),
           axis.title.y = element_text(size=16),
-          text = element_text(size=16)) 
-  # geom_jitter(data=spec.uni,
-  #             aes(y= CrithidiaParasitismRate, x=MeanFloralDiversity,
-  #             color = SiteScreened), width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+          text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+              aes(y= CrithidiaParasitismRate, x=MeanFloralDiversity,
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 ## ***************************************************************************
@@ -183,35 +175,35 @@ p4.parasite <- ggplot(apicystis_floraldiv, aes(x = MeanFloralDiversity,
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
               alpha=0.4, fill = "#3182bd")+
   labs(x = "Floral diversity", y = "Apicystis prevalence") +
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.flower.div,
-    labels =  labs.flower.div) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16))
-  # geom_jitter(data=spec.uni,
-  #             aes(y= ApicystisParasitismRate, x=MeanFloralDiversity,
-  #             color = SiteScreened), width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+        text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+              aes(y= ApicystisParasitismRate, x=MeanFloralDiversity, 
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
     
     
     
 parasite.dilution <- ggarrange(p3.parasite, p1.parasite, p4.parasite, p2.parasite,
                             labels = c("A", "B", "C","D"),
-                            font.label = list(color = "white"),
-                            ncol = 2, nrow = 2)
+                            #font.label = list(color = "white"),
+                            ncol = 2, nrow = 2,
+                            common.legend = TRUE,
+                            legend = "bottom")
 
-ggsave(parasite.dilution, file="figures/parasite_diversity.jpg", 
+ggsave(parasite.dilution, file="figures/parasite_diversity.pdf", 
        height=6, width=10)
 
 ## ***************************************************************************
 # Load model for bombus abundance
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_bombus_abund.Rdata")
-fit.bombus.ba <- fit.parasite
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bombus_abund_lat.Rdata")
+fit.bombus.ba <- fit.parasite.bombus
 
 ## Generate newdata draws
 
@@ -225,26 +217,23 @@ crithidia_beeabun <-
 p5.parasite <- ggplot(crithidia_beeabun, aes(x = Net_BombusAbundance, 
                                              y = estimate__)) +
   geom_line(aes(x = Net_BombusAbundance, y= estimate__), 
-            size = 1.5, color = "#3182bd") +
+            size = 1.5, color = "darkgoldenrod3") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, 
-              fill = "#3182bd") +
+              fill = "darkgoldenrod3") +
   scale_fill_manual(labels ="Bombus 0.95")+
   labs(x = "Bombus abundance (log)", y = "Crithidia prevalence") +
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.bombus.abund,
-    labels =  labs.bombus.abund) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16)) 
-  #  geom_jitter(data=spec.uni,
-  #              aes(y= CrithidiaParasitismRate, x=Net_BombusAbundance,
-  #                  color = SiteScreened), 
-  #              width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+        text = element_text(size=16)) +
+   geom_jitter(data=spec.uni,
+               aes(y= CrithidiaParasitismRate, x=Net_BombusAbundance, 
+                   color = SiteScreened),
+               width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 
@@ -257,30 +246,28 @@ apicystis_bombusabun <-
 p6.parasite <- ggplot(apicystis_bombusabun, aes(x = Net_BombusAbundance, 
                                                 y = estimate__)) +
   geom_line(aes(x = Net_BombusAbundance, y= estimate__), 
-            size = 1.5, color = "grey80") +
+            size = 1.5, color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "grey80")+
+              alpha=0.4, fill = "#3182bd")+
   labs(x = "Bombus abundance (log)", y = "Apicystis prevalence") +
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.bombus.abund,
-    labels =  labs.bombus.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16))  
-  # geom_jitter(data=spec.uni,
-  #             aes(y= ApicystisParasitismRate, x=Net_BombusAbundance,
-  #                 color = SiteScreened),width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+        text = element_text(size=16))+  
+  geom_jitter(data=spec.uni,
+              aes(y= ApicystisParasitismRate, x=Net_BombusAbundance, 
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 ## ***************************************************************************
 # Load model for apis abundance
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_hb_abund.Rdata")
-fit.bombus.ha <- fit.parasite
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_hb_abund_lat.Rdata")
+fit.bombus.ha <- fit.parasite.bombus
 
 ## Generate newdata draws
 cond.effects <- conditional_effects(fit.bombus.ha)
@@ -299,20 +286,18 @@ p7.parasite <- ggplot(crithidia_hbabun, aes(x = Net_HBAbundance,
   geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd", 
               alpha=0.4)+
   labs(x = "Apis abundance (log)", y = "Crithidia prevalence") +
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.HB.abund,
-    labels =  labs.HB.abund) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16))  
-  # geom_jitter(data=spec.uni,
-  #             aes(y= CrithidiaParasitismRate, x=Net_HBAbundance,
-  #                 color = SiteScreened),width=0.05)+
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+        text = element_text(size=16)) + 
+  geom_jitter(data=spec.uni,
+              aes(y= CrithidiaParasitismRate, x=Net_HBAbundance, 
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 ################################################################################
@@ -329,30 +314,30 @@ p8.parasite <- ggplot(apicystis_hbabun, aes(x = Net_HBAbundance,
   geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd", 
               alpha=0.4)+
   labs(x = "Apis abundance (log)", y = "Apicystis prevalence") +
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.HB.abund,
-    labels =  labs.HB.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
-         text = element_text(size=16)) 
-  # geom_jitter(data=spec.uni,
-  #             aes(y= ApicystisParasitismRate, x=Net_HBAbundance,
-  #                 color = SiteScreened),width=0.05) +
-  # scale_color_gradient(low = "grey80", high = "grey20") +
-  # labs(color = "Screened individuals")
+         text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+              aes(y= ApicystisParasitismRate, x=Net_HBAbundance, 
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 
 
 parasite.amplification <- ggarrange(p5.parasite, p7.parasite, p6.parasite, p8.parasite,
                                     nrow= 2, ncol = 2,
+                                    #font.label = list(color = "white"),
                                     labels = c("A", "B", "C", "D"),
-                                    font.label = list(color = "white"))
+                                    common.legend = TRUE,
+                                    legend = "bottom")
 
-ggsave(parasite.amplification, file="figures/parasite_amplification.jpg",
+ggsave(parasite.amplification, file="figures/parasite_amplification.pdf",
        height=6, width=10)
 
 

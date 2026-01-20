@@ -50,8 +50,8 @@ axis.bee.div <-  standardize.axis(labs.bee.div,
 
 ## ***************************************************************************
 # Load model for latitude
-load(file="saved/parasiteFit_bombus_CrithidiaPresenceApicystisSpp_lat.Rdata")
-fit.bombus.l <- fit.parasite
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_lat_lat.Rdata")
+fit.bombus.l <- fit.parasite.bombus
 
 ## Generate newdata draws
 cond.effects <- conditional_effects(fit.bombus.l)
@@ -65,24 +65,20 @@ lat_beediv <-
   cond.effects[["NetBeeDiversity.NetBeeDiversity_Lat"]]
 
 p1 <- ggplot(lat_beediv, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "grey80") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, fill = "grey80") +
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
+            color = "darkgoldenrod3") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), 
+              alpha=0.4, fill = "darkgoldenrod3") +
   labs(x = "Latitude (log)", y = "Bee diversity")+
-  theme_dark_black()+
-  #theme_ms() +
+  #theme_dark_black()+
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
-  scale_y_continuous(
-    breaks = axis.bee.div,
-    labels =  labs.bee.div) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16)) 
-  # geom_point(data= spec.uni,
-  #            aes(y= Net_BeeDiversity, x=Lat), cex=2)
+        text = element_text(size=16)) +
+  geom_jitter(data= spec.uni,
+             aes(y= Net_BeeDiversity, x=Lat), cex=2)
 
 ggsave(p1, file="figures/Lat_beediv.jpg",
        height=4, width=5)
@@ -96,25 +92,19 @@ lat_floraldiv <-
 
 p2 <- ggplot(lat_floraldiv, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            color = "darkgoldenrod3") +
+            color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "darkgoldenrod3") +
+              alpha=0.4, fill = "#3182bd") +
   labs(x = "Latitude (log)", y = "Mean floral diversity") +
-  theme_dark_black() +
-  #theme_ms() +
+  #theme_dark_black() +
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
-  scale_y_continuous(
-    breaks = axis.flower.div,
-    labels =  labs.flower.div) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16)) 
-  # geom_point(data=spec.uni,
-  #            aes(y= MeanFloralDiversity, x=Lat), cex=2)
+        text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+             aes(y= MeanFloralDiversity, x=Lat), cex=2)
 
 ggsave(p2, file="figures/Lat_floraldiv.pdf",
        height=4, width=5)
@@ -129,24 +119,18 @@ lat_bombusabund <-
 
 
 p3 <- ggplot(lat_bombusabund, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "grey80") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, fill = "grey80") +
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, fill = "#3182bd") +
   labs(x = "Latitude (log)", y = "Bombus abundance(log)") +
-  theme_dark_black() +
-  #theme_ms() +
+  #theme_dark_black() +
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
-  scale_y_continuous(
-    breaks = axis.bombus.abund,
-    labels =  labs.bombus.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=14),
-        text = element_text(size=16)) 
-  # geom_point(data=spec.uni,
-  #            aes(y= Net_BombusAbundance, x=Lat), cex=2)
+        text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+             aes(y= Net_BombusAbundance, x=Lat), cex=2)
 
 
 
@@ -154,24 +138,18 @@ p3 <- ggplot(lat_bombusabund, aes(x = Lat, y = estimate__)) +
 lat_apisabund <- cond.effects[["NetHBAbundance.NetHBAbundance_Lat"]]
 
 p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "grey80") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, fill = "grey80") +
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
   labs(x = "Latitude (log)", y = "Apis abundance (log)") +
-  theme_dark_black() +
-  # theme_ms() +
+  #theme_dark_black() +
+   theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
-  scale_y_continuous(
-    breaks = axis.HB.abund,
-    labels =  labs.HB.abund) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=15),
-        text = element_text(size=16)) 
-  # geom_point(data=spec.uni,
-  #            aes(y= Net_HBAbundance, x=Lat), cex=2)
+        text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+             aes(y= Net_HBAbundance, x=Lat), cex=2)
 
 
 
@@ -190,22 +168,23 @@ crithidia_lat <-
   cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
 
 p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "grey80") +
+  geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__),
-              alpha=0.4, fill = "grey80") +
+              alpha=0.4) +
   labs(x = "Latitude (log)", y = "Crithidia prevalence") +
-  theme_dark_black() +
-  #theme_ms() +
+  #theme_dark_black() +
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=16),
         text = element_text(size=16),
-        plot.title = element_text(color = "black")) 
-  #geom_point(data= spec.uni,aes(y= CrithidiaParasitismRate, x= Lat), cex=2)
+        plot.title = element_text(color = "black")) +
+  geom_jitter(data= spec.uni,aes(y= CrithidiaParasitismRate, x= Lat,
+                                 color = SiteScreened),
+             width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 
@@ -222,18 +201,19 @@ p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd",
               alpha=0.4) +
   labs(x = "Latitude (log)", y = "Apicystis prevalence") +
-  theme_dark_black() +
-  #theme_ms() +
+  #theme_dark_black() +
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16))
-  # geom_jitter(data= spec.uni,
-  #             aes(y= ApicystisParasitismRate, x= Lat), cex=2) 
+        text = element_text(size=16)) +
+  geom_jitter(data= spec.uni,
+              aes(y= ApicystisParasitismRate, x= Lat,
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 
@@ -241,8 +221,8 @@ p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
 ## crithida ~ lat in Apis
 ## ***************************************************************************
 # Load model for lat
-load(file="saved/parasiteFit_apis_CrithidiaPresenceApicystisSpp_lat.Rdata")
-fit.apis.l <- fit.parasite
+load(file="saved/parasiteFit_Apis_CrithidiaPresenceApicystisSpp_lat_lat.Rdata")
+fit.apis.l <- fit.parasite.apis
 
 ## Generate newdata draws
 cond.effects <- conditional_effects(fit.apis.l)
@@ -252,23 +232,23 @@ crithidia_lat_apis <-
 
 p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size= 1.5, 
-            linetype = "dotdash", color = "grey80") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, 
-              fill = "grey80") +
+            linetype = "dotdash") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.2) +
   labs(x = "Latitude (log)", y = "Crithidia prevalence") +
-  theme_dark_black() +
-  #theme_ms() +
+  #theme_dark_black() +
+  theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=16),
         text = element_text(size=16), 
-        plot.title = element_text(color = "black")) 
-  # geom_jitter(data= spec.uni,
-  #             aes(y= CrithidiaParasitismRate, x= Lat), cex=2) 
+        plot.title = element_text(color = "black")) +
+  geom_jitter(data= spec.uni,
+              aes(y= CrithidiaParasitismRate, x= Lat,
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 
@@ -280,34 +260,34 @@ apicystis_lat_apis <-
 
 p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            linetype = "dotdash", color = "darkgoldenrod3") +
+            linetype = "dotdash", color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "darkgoldenrod3") +
+              alpha=0.4, fill = "#3182bd") +
   labs(x = "Latitude (log)", y = "Apicystis prevalence") +
-  theme_dark_black() +
-  # theme_ms() +
+  #theme_dark_black() +
+   theme_ms() +
   #theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.lat.x,
-    labels =  labs.lat.x) +
   theme(axis.title.x = element_text(size=16),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
         axis.title.y = element_text(size=16),
-        text = element_text(size=16)) 
-  # geom_jitter(data=spec.uni,
-  #             aes(y= ApicystisParasitismRate, x= Lat), cex=2) 
+        text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+              aes(y= ApicystisParasitismRate, x= Lat,
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
 
 
 
 
-lat_parasite <- ggarrange(p5, p7, p6, p8,
+lat_full <- ggarrange(p5, p7, p6, p8,
                          p2,p1,p3,p4,
                          labels = c("A", "B", "C","D", "E", "F", "G", "H"),
                          ncol = 4, nrow = 2, 
-                         heights = 1, widths = c(3, 3, 3, 3),
-                         font.label = list(color = "white"))
+                         heights = 1, widths = c(3, 3, 3, 3))
 
-ggsave(lat_parasite, file="figures/lat_full.jpg",
+ggsave(lat_full, file="figures/lat_full.pdf",
        height=6, width=14)
 
 lat_par <- ggarrange(p5,p7,p6,p8, 
@@ -320,6 +300,14 @@ ggsave(lat_par, file="figures/lat_par.jpg",
 ################################################################################
 ## Plant diversity and bee diversity
 ################################################################################
+# Load model for floral div
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bee_div_fd.Rdata")
+fit.fd <- fit.parasite.bombus
+
+## Generate newdata draws
+cond.effects <- conditional_effects(fit.fd)
+
+
 beediv_floraldiv <-
   cond.effects[["NetBeeDiversity.NetBeeDiversity_MeanFloralDiversity"]]
 
@@ -332,12 +320,6 @@ plantdiv_beediv <- ggplot(beediv_floraldiv, aes(x = MeanFloralDiversity,
   labs(y = "Bee Species Diversity", x = "Floral Diversity",
        fill = "Credible interval") +
   theme(legend.position = "bottom") +
-  scale_x_continuous(
-    breaks = axis.flower.div,
-    labels =  labs.flower.div) +
-  scale_y_continuous(
-    breaks = axis.bee.div,
-    labels =  labs.bee.div) +
   theme(axis.title.x = element_text(size=16),
         axis.title.y = element_text(size=16),
         text = element_text(size=16)) +

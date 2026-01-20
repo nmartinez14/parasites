@@ -181,8 +181,7 @@ mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvar.name="floral_div",
                                        top.level = "cp")
 
-bombus.fd <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.fd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
@@ -190,32 +189,28 @@ bombus.fd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        top.level = "area")
 ## bee diversity
 
-bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.bd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="bee_div",
                                        top.level = "lat")
 
-bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.bd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="bee_div",
                                        top.level = "cp")
 
-bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.bd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="bee_div",
                                        top.level = "area")
 
-bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.bd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.bd,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
@@ -223,47 +218,116 @@ bombus.bd <- runCombinedParasiteModels(spec.data= spec.bombus,
                                        top.level = "fd")
 
 ## bombus abundance
-bombus.ba <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                         species.group="bombus",
+mod.ba <- runCombinedParasiteModels(spec.data= spec.net,
                                          xvars=xvars.ba,
                                          ncores=ncores,
                                          data2= list(phylo_matrix=phylo_matrix),
-                                         xvar.name="bombus_abund")
+                                         xvar.name="bombus_abund",
+                                         top.level = "lat")
 
-bombus.ha <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.ba <- runCombinedParasiteModels(spec.data= spec.net,
+                                    xvars=xvars.ba,
+                                    ncores=ncores,
+                                    data2= list(phylo_matrix=phylo_matrix),
+                                    xvar.name="bombus_abund",
+                                    top.level = "area")
+
+mod.ba <- runCombinedParasiteModels(spec.data= spec.net,
+                                    xvars=xvars.ba,
+                                    ncores=ncores,
+                                    data2= list(phylo_matrix=phylo_matrix),
+                                    xvar.name="bombus_abund",
+                                    top.level = "cp")
+
+mod.ba <- runCombinedParasiteModels(spec.data= spec.net,
+                                    xvars=xvars.ba,
+                                    ncores=ncores,
+                                    data2= list(phylo_matrix=phylo_matrix),
+                                    xvar.name="bombus_abund",
+                                    top.level = "fd")
+## honey bee abundance
+
+mod.ha <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.ha,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="hb_abund")
+                                       xvar.name="hb_abund",
+                                       top.level = "lat")
 
-bombus.d <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+mod.ha <- runCombinedParasiteModels(spec.data= spec.net,
+                                    xvars=xvars.ha,
+                                    ncores=ncores,
+                                    data2= list(phylo_matrix=phylo_matrix),
+                                    xvar.name="hb_abund",
+                                    top.level = "area")
+
+mod.ha <- runCombinedParasiteModels(spec.data= spec.net,
+                                    xvars=xvars.ha,
+                                    ncores=ncores,
+                                    data2= list(phylo_matrix=phylo_matrix),
+                                    xvar.name="hb_abund",
+                                    top.level = "cp")
+
+mod.ha <- runCombinedParasiteModels(spec.data= spec.net,
+                                    xvars=xvars.ha,
+                                    ncores=ncores,
+                                    data2= list(phylo_matrix=phylo_matrix),
+                                    xvar.name="hb_abund",
+                                    top.level = "fd")
+## diet breadth
+
+bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.d,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="degree")
+                                       xvar.name="degree",
+                                       top.level = "lat")
 
-bombus.l <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                       species.group="bombus",
+bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+                                      xvars=xvars.d,
+                                      ncores=ncores,
+                                      data2= list(phylo_matrix=phylo_matrix),
+                                      xvar.name="degree",
+                                      top.level = "area")
+
+bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+                                      xvars=xvars.d,
+                                      ncores=ncores,
+                                      data2= list(phylo_matrix=phylo_matrix),
+                                      xvar.name="degree",
+                                      top.level = "cp")
+
+bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+                                      xvars=xvars.d,
+                                      ncores=ncores,
+                                      data2= list(phylo_matrix=phylo_matrix),
+                                      xvar.name="degree",
+                                      top.level = "fd")
+
+## Latitude
+
+bombus.l <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.l,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
-                                       xvar.name="lat")
+                                       xvar.name="lat",
+                                      top.level = "lat")
+## Area
 
-bombus.a <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                      species.group="bombus",
+bombus.a <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.a,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="area")
+                                      xvar.name="area",
+                                      top.level = "area")
+## Cumulative precipitation
 
-bombus.cp <- runCombinedParasiteModels(spec.data= spec.bombus,
-                                      species.group="bombus",
+bombus.cp <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.cp,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
-                                      xvar.name="cp")
+                                      xvar.name="cp",
+                                      top.level = "cp")
 
 
 
