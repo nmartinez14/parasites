@@ -11,6 +11,7 @@ source("src/makeMultiLevelData.R")
 source("src/runParasiteModels.R")
 source("src/standardize_weights.R")
 source("src/runPlotFreqModelDiagnostics.R")
+source("src/pp_checks.R")
 
 ## site or lat as the geographic variable
 site.or.lat <- "lat"
@@ -181,6 +182,7 @@ mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvar.name="floral_div",
                                        top.level = "cp")
 
+
 mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.fd,
                                        ncores=ncores,
@@ -195,6 +197,7 @@ mod.bd <- runCombinedParasiteModels(spec.data= spec.net,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="bee_div",
                                        top.level = "lat")
+
 
 mod.bd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.bd,
@@ -306,7 +309,7 @@ bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
 
 ## Latitude
 
-bombus.l <- runCombinedParasiteModels(spec.data= spec.net,
+mod.l <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.l,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
@@ -314,7 +317,7 @@ bombus.l <- runCombinedParasiteModels(spec.data= spec.net,
                                       top.level = "lat")
 ## Area
 
-bombus.a <- runCombinedParasiteModels(spec.data= spec.net,
+mod.a <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.a,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
@@ -322,7 +325,7 @@ bombus.a <- runCombinedParasiteModels(spec.data= spec.net,
                                       top.level = "area")
 ## Cumulative precipitation
 
-bombus.cp <- runCombinedParasiteModels(spec.data= spec.net,
+mod.cp <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.cp,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),

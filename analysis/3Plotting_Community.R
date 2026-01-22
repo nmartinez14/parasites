@@ -78,7 +78,11 @@ p1 <- ggplot(lat_beediv, aes(x = Lat, y = estimate__)) +
         axis.title.y = element_text(size=16),
         text = element_text(size=16)) +
   geom_jitter(data= spec.uni,
-             aes(y= Net_BeeDiversity, x=Lat), cex=2)
+             aes(y= Net_BeeDiversity, x=Lat), cex=2)+
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 6)
+  )
+
 
 ggsave(p1, file="figures/Lat_beediv.jpg",
        height=4, width=5)
@@ -184,7 +188,14 @@ p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
                                  color = SiteScreened),
              width=0.05) +
   scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals")
+  labs(color = "Screened individuals")+
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 6))+
+  coord_cartesian(
+    xlim = range(crithidia_lat$Lat, na.rm = TRUE)
+  )
+
+
 
 
 
@@ -213,7 +224,12 @@ p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
                   color = SiteScreened),
               width=0.05) +
   scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals")
+  labs(color = "Screened individuals")+
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 6))+
+  coord_cartesian(
+    xlim = range(crithidia_lat$Lat, na.rm = TRUE)
+  )
 
 
 
@@ -248,7 +264,12 @@ p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
                   color = SiteScreened),
               width=0.05) +
   scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals")
+  labs(color = "Screened individuals") +
+  scale_x_continuous(
+    breaks = scales::pretty_breaks(n = 6))+
+  coord_cartesian(
+    xlim = range(crithidia_lat_apis$Lat, na.rm = TRUE)
+  )
 
 
 
