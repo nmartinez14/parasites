@@ -184,6 +184,7 @@ runCombinedParasiteModels <- function(spec.data,## data
   print("Apis R2:")
   print(round(r2.apis, 2))
   
+  
   ## Save the Bombus model results
   save(fit.parasite.bombus, spec.data, r2.bombus,
        file=sprintf("saved/parasiteFit_Bombus_%s_%s_%s.Rdata",
@@ -206,6 +207,7 @@ runCombinedParasiteModels <- function(spec.data,## data
                                       paste(parasites, collapse=""),
                                       xvar.name, top.level))
   
+
   ## Create tables with the results for Bombus
   write.ms.table(fit.parasite.bombus,
                  sprintf("parasitism_Bombus_%s_%s_%s",
@@ -217,6 +219,9 @@ runCombinedParasiteModels <- function(spec.data,## data
                  sprintf("parasitism_Apis_%s_%s_%s",
                          paste(parasites, collapse=""),
                          xvar.name, top.level))
+  
+  
+
   
   return(list(fit.bombus=fit.parasite.bombus,
               fit.apis=fit.parasite.apis,
