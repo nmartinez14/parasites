@@ -16,19 +16,9 @@ source("src/pp_checks.R")
 ## site or lat as the geographic variable
 site.or.lat <- "lat"
 
-## all of the variables that are explanatory variables and thus need
-## to be centered
-vars_yearsr <- c("MeanFloralDiversity",
-                 "Net_BeeDiversity",
-                 "Net_BeeAbundance",
-                 "Net_BombusAbundance",
-                 "Net_HBAbundance",
-                 "Cumulative_Precip"
-                 )
-vars_yearsrsp <- "rare.degree"
-vars_site <- c("Lat", "Area")
 
-variables.to.log <- c("rare.degree", "Lat", "Net_BeeAbundance", "Area")
+
+variables.to.log <- c("rare.degree", "Lat", "Area")
 
 ## some zeros in data
 variables.to.log.1 <- c("Net_HBAbundance", "Net_BombusAbundance")
@@ -91,19 +81,19 @@ spec.net$GenusSpecies[spec.net$GenusSpecies %in%
 ## community model, check assumptions first before adding parasites
 ## **********************************************************
 
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.flower.div),
+run_plot_freq_model_diagnostics(remove_subset_formula(formula.flower.div1),
                                 this_data=spec.net[spec.net$Weights == 1,],
                                 this_family="students", site.lat=site.or.lat)
 
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.bombus.abund),
+run_plot_freq_model_diagnostics(remove_subset_formula(formula.bombus.abund1),
                                 this_data=spec.net[spec.net$Weights == 1,],
                                 this_family="students", site.lat=site.or.lat)
 
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.HB.abund),
+run_plot_freq_model_diagnostics(remove_subset_formula(formula.HB.abund1),
                                 this_data=spec.net[spec.net$Weights == 1,],
                                 this_family="students", site.lat=site.or.lat)
 
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.div),
+run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.div1),
                                 this_data=spec.net[spec.net$Weights == 1,],
                                 this_family="gaussian",
                                 site.lat=site.or.lat)
@@ -114,50 +104,50 @@ run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.div),
 ## Bombus predictor variables
 ## phylogeny must be last in all xvar sets
 
-xvars.fd <-  c("MeanFloralDiversity",
-               "Cumulative_Precip",
-               "Lat","Area",
+xvars.fd <-  c("scale(MeanFloralDiversity)",
+               "scale(Cumulative_Precip)",
+               "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.bd <-  c("Net_BeeDiversity",
-               "Cumulative_Precip",
-               "Lat","Area",
+xvars.bd <-  c("scale(Net_BeeDiversity)",
+               "scale(Cumulative_Precip)",
+               "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
-xvars.ba <-  c("Net_BombusAbundance",
-               "MeanFloralDiversity",
-               "Cumulative_Precip",
-               "Lat","Area",
-               "(1|Site)",
-               "(1|gr(GenusSpecies, cov = phylo_matrix))")
-
-
-xvars.ha <-  c("Net_HBAbundance",
-               "MeanFloralDiversity",
-               "Cumulative_Precip",
-               "Lat","Area",
-               "(1|Site)",
-               "(1|gr(GenusSpecies, cov = phylo_matrix))")
-
-xvars.d <-  c("rare.degree",
-              "Cumulative_Precip",
-               "Lat","Area",
-               "(1|Site)",
-               "(1|gr(GenusSpecies, cov = phylo_matrix))")
-
-xvars.l <-  c("Lat",
-               "(1|Site)",
-               "(1|gr(GenusSpecies, cov = phylo_matrix))")
-
-xvars.a <-  c("Area",
+xvars.ba <-  c("scale(Net_BombusAbundance)",
+               "scale(MeanFloralDiversity)",
+               "scale(Cumulative_Precip)",
+               "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 
-xvars.cp <-  c("Cumulative_Precip",
-               "Lat",
+xvars.ha <-  c("scale(Net_HBAbundance)",
+               "scale(MeanFloralDiversity)",
+               "scale(Cumulative_Precip)",
+               "scale(Lat)","scale(Area)",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
+
+xvars.d <-  c("scale(rare.degree)",
+              "scale(Cumulative_Precip)",
+              "scale(Lat)","scale(Area)",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
+
+xvars.l <-  c("scale(Lat)",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
+
+xvars.a <-  c("scale(Area)",
+               "(1|Site)",
+               "(1|gr(GenusSpecies, cov = phylo_matrix))")
+
+
+xvars.cp <-  c("scale(Cumulative_Precip)",
+               "scale(Lat)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
@@ -174,6 +164,13 @@ mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="floral_div",
                                        top.level = "lat")
+## Make pp_check plots
+pp_check_all(
+  fit_bombus = fit.parasite.bombus,
+  fit_apis   = fit.parasite.apis,
+  xvar.name  = xvar.name,
+  top.level  = top.level
+)
 
 mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.fd,
