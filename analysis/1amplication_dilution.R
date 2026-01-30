@@ -10,13 +10,11 @@ source("src/writeResultsTable.R")
 source("src/makeMultiLevelData.R")
 source("src/runParasiteModels.R")
 source("src/standardize_weights.R")
-source("src/runPlotFreqModelDiagnostics.R")
 source("src/pp_checks.R")
 
-## site or lat as the geographic variable
+## "site" for community models as predictor variable or 
+## "lat" to have site as random effect
 site.or.lat <- "lat"
-
-
 
 variables.to.log <- c("rare.degree", "Lat", "Area")
 
@@ -44,9 +42,7 @@ spec.net$rare.degree[!spec.net$GenusSpecies %in%
                      c("Apis mellifera", screened.bombus)] <- NA
 
 dim(spec.net)
-## raw, non standardized data for plotting
-spec.orig <- prepDataSEM(spec.net, variables.to.log, variables.to.log.1,
-                         standardize=FALSE)
+
 
 ## Make SEM weights
 spec.net <- prepDataSEM(spec.net, variables.to.log, variables.to.log.1,
@@ -63,7 +59,7 @@ spec.net$ApisWeights <- ifelse(spec.net$Apidae == 1 & spec.net$Genus == "Apis", 
 ## define all the formulas for the different parts of the models
 source("src/plant_poll_models.R")
 
-save(spec.net, spec.orig, file="saved/spec_weights.Rdata")
+save(spec.net, file="saved/spec_weights.Rdata")
 
 ## Species that are not in the phylogeny are not used. brms is not
 ## allowing an incomplete phylogeny, to avoid the error we changed the
@@ -77,26 +73,7 @@ not_in_phylo <- unique(spec.net$GenusSpecies[!spec.net$GenusSpecies
 ## only bombus model is multi species given the others do not converge
 spec.net$GenusSpecies[spec.net$GenusSpecies %in%
                          not_in_phylo]<- "Agapostemon angelicus"
-## **********************************************************
-## community model, check assumptions first before adding parasites
-## **********************************************************
 
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.flower.div1),
-                                this_data=spec.net[spec.net$Weights == 1,],
-                                this_family="students", site.lat=site.or.lat)
-
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.bombus.abund1),
-                                this_data=spec.net[spec.net$Weights == 1,],
-                                this_family="students", site.lat=site.or.lat)
-
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.HB.abund1),
-                                this_data=spec.net[spec.net$Weights == 1,],
-                                this_family="students", site.lat=site.or.lat)
-
-run_plot_freq_model_diagnostics(remove_subset_formula(formula.bee.div1),
-                                this_data=spec.net[spec.net$Weights == 1,],
-                                this_family="gaussian",
-                                site.lat=site.or.lat)
 
 ## **********************************************************
 ## Parasite models set up
@@ -164,13 +141,7 @@ mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="floral_div",
                                        top.level = "lat")
-## Make pp_check plots
-pp_check_all(
-  fit_bombus = fit.parasite.bombus,
-  fit_apis   = fit.parasite.apis,
-  xvar.name  = xvar.name,
-  top.level  = top.level
-)
+
 
 mod.fd <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.fd,
@@ -276,28 +247,28 @@ mod.ha <- runCombinedParasiteModels(spec.data= spec.net,
                                     top.level = "fd")
 ## diet breadth
 
-bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+mod.d <- runCombinedParasiteModels(spec.data= spec.net,
                                        xvars=xvars.d,
                                        ncores=ncores,
                                        data2= list(phylo_matrix=phylo_matrix),
                                        xvar.name="degree",
                                        top.level = "lat")
 
-bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+mod.d <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.d,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
                                       xvar.name="degree",
                                       top.level = "area")
 
-bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+mod.d <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.d,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
                                       xvar.name="degree",
                                       top.level = "cp")
 
-bombus.d <- runCombinedParasiteModels(spec.data= spec.net,
+mod.d <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvars=xvars.d,
                                       ncores=ncores,
                                       data2= list(phylo_matrix=phylo_matrix),
@@ -329,61 +300,5 @@ mod.cp <- runCombinedParasiteModels(spec.data= spec.net,
                                       xvar.name="cp",
                                       top.level = "cp")
 
-
-
-## **********************************************************
-## Parasite presence
-## **********************************************************
-## Apis
-## **********************************************************
-
-apis.fd <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.fd[-length(xvars.fd)],
-                                     ncores=ncores,
-                                     xvar.name= "floral_div")
-
-
-apis.bd <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.bd[-length(xvars.bd)],
-                                     ncores=ncores,
-                                     xvar.name= "bee_div")
-
-apis.ba <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.ba[-length(xvars.ba)],
-                                     ncores=ncores,
-                                     xvar.name= "bombus_abund")
-
-apis.ha <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.ha[-length(xvars.ha)],
-                                     ncores=ncores,
-                                     xvar.name= "ha_abund")
-
-apis.d <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.d[-length(xvars.d)],
-                                     ncores=ncores,
-                                     xvar.name= "degree")
-
-apis.l <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.l[-length(xvars.l)],
-                                     ncores=ncores,
-                                     xvar.name= "lat")
-
-apis.a <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.a[-length(xvars.a)],
-                                     ncores=ncores,
-                                     xvar.name= "area")
-
-apis.cp <- runCombinedParasiteModels(spec.data= spec.apis,
-                                     species.group="apis",
-                                     xvars=xvars.cp[-length(xvars.cp)],
-                                     ncores=ncores,
-                                     xvar.name= "cp")
 
 

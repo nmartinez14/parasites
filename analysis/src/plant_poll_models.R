@@ -108,32 +108,101 @@ if(site.or.lat ==  "lat"){
 
 } else{
 
-    ## flower diversity
-    formula.flower.div <- formula(MeanFloralDiversity |
-                                  subset(Weights) ~
-                                      Cumulative_Precip +
-                                      Site
-                                  )
-
-    ## bee diversity
-    formula.bee.div <- formula(Net_BeeDiversity |
-                               subset(Weights) ~
-                                   MeanFloralDiversity +
-                                   Cumulative_Precip +
+  ## flower diversity
+  formula.flower.div1 <- formula(scale(MeanFloralDiversity) |
+                                   subset(Weights) ~
+                                   scale(Lat) + 
                                    Site
-                               )
-    ## bombus abund
-    formula.bombus.abund <- formula(Net_BombusAbundance |
-                                    subset(Weights)~
-                                        MeanFloralDiversity +
-                                        Cumulative_Precip +
-                                        Site
-                                    )
-    ## HB abund
-    formula.HB.abund <- formula(Net_HBAbundance |
-                                subset(Weights) ~
-                                    Site
-                                )
+  )
+  
+  formula.flower.div2 <- formula(scale(MeanFloralDiversity) |
+                                   subset(Weights) ~
+                                   scale(Cumulative_Precip) + 
+                                   scale(Lat) +
+                                   Site
+  )
+  formula.flower.div3 <- formula(scale(MeanFloralDiversity) |
+                                   subset(Weights) ~
+                                   scale(Area) +                              
+                                   Site
+  )
+  
+  ## bee diversity
+  formula.bee.div1 <- formula(scale(Net_BeeDiversity) |
+                                subset(Weights)~
+                                scale(Lat) +
+                                Site
+  )
+  formula.bee.div2 <- formula(scale(Net_BeeDiversity) |
+                                subset(Weights)~
+                                scale(Cumulative_Precip) +
+                                scale(Lat) +
+                                Site
+  )
+  formula.bee.div3 <- formula(scale(Net_BeeDiversity) |
+                                subset(Weights)~
+                                scale(Area) +
+                                Site
+  )
+  formula.bee.div4 <- formula(scale(Net_BeeDiversity) |
+                                subset(Weights)~
+                                scale(MeanFloralDiversity) +
+                                scale(Cumulative_Precip) +
+                                scale(Lat) +
+                                scale(Area) +
+                                Site
+  )
+  ## bombus abund
+  formula.bombus.abund1 <- formula(scale(Net_BombusAbundance) |
+                                     subset(Weights)~
+                                     scale(Lat) +
+                                     Site
+  )
+  formula.bombus.abund2 <- formula(scale(Net_BombusAbundance) |
+                                     subset(Weights)~
+                                     scale(Cumulative_Precip) +
+                                     scale(Lat) +
+                                     Site
+  )
+  formula.bombus.abund3 <- formula(scale(Net_BombusAbundance) |
+                                     subset(Weights)~
+                                     scale(Area) +
+                                     Site
+  )
+  formula.bombus.abund4 <- formula(scale(Net_BombusAbundance) |
+                                     subset(Weights)~
+                                     scale(MeanFloralDiversity) +
+                                     scale(Cumulative_Precip) +
+                                     scale(Lat) +
+                                     scale(Area) +
+                                     Site
+  )
+  ## HB abund
+  formula.HB.abund1 <- formula(scale(Net_HBAbundance) |
+                                 subset(Weights)~
+                                 scale(Lat) +
+                                 Site
+  )
+  formula.HB.abund2 <- formula(scale(Net_HBAbundance) |
+                                 subset(Weights)~
+                                 scale(Cumulative_Precip) +
+                                 scale(Lat) +
+                                 Site
+  )
+  formula.HB.abund3 <- formula(scale(Net_HBAbundance) |
+                                 subset(Weights)~
+                                 scale(Area) +
+                                 Site
+  )
+  formula.HB.abund4 <- formula(scale(Net_HBAbundance) |
+                                 subset(Weights)~
+                                 scale(MeanFloralDiversity) +
+                                 scale(Cumulative_Precip) +
+                                 scale(Lat) +
+                                 scale(Area) +
+                                 Site
+  )
+  
 
 
 }

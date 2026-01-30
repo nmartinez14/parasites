@@ -14,8 +14,8 @@ pp_check_all <- function(
   
   run_ppc <- function(fit, pollinator) {
     
-    responses <- c('MeanFloralDiversity', 'NetBombusAbundance', 
-                   'NetHBAbundance', 'NetBeeDiversity', 
+    responses <- c('scaleMeanFloralDiversity', 'scaleNetBombusAbundance', 
+                   'scaleNetHBAbundance', 'scaleNetBeeDiversity', 
                    'CrithidiaPresence', 'ApicystisSpp')
     
     file <- sprintf(

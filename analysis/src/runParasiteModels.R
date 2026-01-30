@@ -220,8 +220,13 @@ runCombinedParasiteModels <- function(spec.data,## data
                          paste(parasites, collapse=""),
                          xvar.name, top.level))
   
-  
-
+  ## Make pp_check plots
+  pp_check_all(
+    fit_bombus = fit.parasite.bombus,
+    fit_apis   = fit.parasite.apis,
+    xvar.name  = xvar.name,
+    top.level  = top.level
+  )
   
   return(list(fit.bombus=fit.parasite.bombus,
               fit.apis=fit.parasite.apis,

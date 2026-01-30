@@ -14,51 +14,15 @@ source("src/misc.R")
 source("src/ggplotThemes.R")
 
 
-site.screened <- spec.orig %>%
+site.screened <- spec.net %>%
   group_by(Site, Year, SampleRound) %>%
   summarise(SiteScreened = sum(!is.na(Apidae)))
 
-spec.orig <- left_join(spec.orig, site.screened)
 spec.net <- left_join(spec.net, site.screened)
-## ***********************************************************************
-## scaling/unscaling labs
-## ***********************************************************************
-# original data, subsetted to unique values
-spec.uni.orig <- spec.orig[spec.orig$Weights ==1,]
-## scaled data subsetted to unique values
+
+## data subsetted to unique values
 spec.uni <- spec.net[spec.net$Weights ==1,]
 
-## use unscaled data to have nice axis labels, convert to scaled for
-## the axes
-
-## lat (logged)
-labs.lat.x <- pretty(c(spec.uni.orig$Lat),
-                      n=10)
-axis.lat.x <-  standardize.axis(labs.lat.x, spec.uni.orig$Lat)
-
-## flower div (not logged)
-labs.flower.div <- (pretty(spec.uni.orig$MeanFloralDiversity, n=5))
-axis.flower.div <-  standardize.axis(labs.flower.div,
-                                     spec.uni.orig$MeanFloralDiversity)
-## HB abund (logged + 1)
-labs.HB.abund <- (pretty(c(spec.uni.orig$Net_HBAbundance), n=5))
-axis.HB.abund <-  standardize.axis(labs.HB.abund, spec.uni.orig$Net_HBAbundance)
-## bombus abund (logged + 1)
-labs.bombus.abund <- (pretty(c(spec.uni.orig$Net_BombusAbundance), n=5))
-axis.bombus.abund <-  standardize.axis(labs.bombus.abund, spec.uni.orig$Net_BombusAbundance)
-
-## bee diversity (not logged)
-labs.bee.div <- (pretty(c(spec.uni.orig$Net_BeeDiversity), n=5))
-axis.bee.div <-  standardize.axis(labs.bee.div,
-                                  spec.uni.orig$Net_BeeDiversity)
-
-## use all the species data or just bombus? 
-bombus.par <- spec.orig[spec.orig$WeightsPar==1 & spec.orig$Genus == "Bombus", ]
-apis.par <- spec.orig[spec.orig$WeightsPar==1 & spec.orig$Genus == "Apis", ]
-## rare.degree (logged)
-labs.degree <- (pretty(bombus.par$rare.degree, n=10))
-axis.degree <-  standardize.axis(labs.degree,
-                                  bombus.par$rare.degree)
 
 ## ***************************************************************************
 # Load model for bee diversity
@@ -90,7 +54,7 @@ p1.parasite <- ggplot(crithidia_beediv, aes(x = Net_BeeDiversity,
         axis.title.y = element_text(size=16),
         text = element_text(size=16))+
   geom_jitter(data=spec.uni,
-              aes(y= CrithidiaParasitismRate, x=Net_BeeDiversity,
+              aes(y= CrithidiaParasitismRate, x= Net_BeeDiversity,
                   color = SiteScreened),
               width=0.05) +
   scale_color_gradient(low = "grey80", high = "grey20") +
@@ -217,9 +181,8 @@ crithidia_beeabun <-
 p5.parasite <- ggplot(crithidia_beeabun, aes(x = Net_BombusAbundance, 
                                              y = estimate__)) +
   geom_line(aes(x = Net_BombusAbundance, y= estimate__), 
-            size = 1.5, color = "darkgoldenrod3") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, 
-              fill = "darkgoldenrod3") +
+            size = 1.5) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.2) +
   scale_fill_manual(labels ="Bombus 0.95")+
   labs(x = "Bombus abundance (log)", y = "Crithidia prevalence") +
   #theme_dark_black()+
@@ -339,7 +302,5 @@ parasite.amplification <- ggarrange(p5.parasite, p7.parasite, p6.parasite, p8.pa
 
 ggsave(parasite.amplification, file="figures/parasite_amplification.pdf",
        height=6, width=10)
-
-
 
 
