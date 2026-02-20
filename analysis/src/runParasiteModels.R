@@ -152,6 +152,7 @@ runCombinedParasiteModels <- function(spec.data,## data
   print("Fitting Bombus model...")
   fit.parasite.bombus <- brm(bform.bombus, spec.data,
                              cores= ncores,
+                             backend = "cmdstanr",
                              iter = iter,
                              chains = chains,
                              thin=thin,
@@ -166,6 +167,7 @@ runCombinedParasiteModels <- function(spec.data,## data
   print("Fitting Apis model...")
   fit.parasite.apis <- brm(bform.apis, spec.data,
                            cores= ncores,
+                           backend = "cmdstanr",
                            iter = iter,
                            chains = chains,
                            thin=thin,
