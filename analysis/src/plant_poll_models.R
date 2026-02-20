@@ -20,7 +20,7 @@ if(site.or.lat ==  "lat"){
 
     formula.flower.div2 <- formula(scale(MeanFloralDiversity) |
                                      subset(Weights) ~
-                                     scale(Cumulative_Precip) + 
+                                     scale(APi) + 
                                      scale(Lat) +
                                      (1|Site)
     )
@@ -38,7 +38,7 @@ if(site.or.lat ==  "lat"){
                                )
     formula.bee.div2 <- formula(scale(Net_BeeDiversity) |
                                  subset(Weights)~
-                                 scale(Cumulative_Precip) +
+                                 scale(APi) +
                                   scale(Lat) +
                                  (1|Site)
     )
@@ -50,7 +50,7 @@ if(site.or.lat ==  "lat"){
     formula.bee.div4 <- formula(scale(Net_BeeDiversity) |
                                  subset(Weights)~
                                  scale(MeanFloralDiversity) +
-                                 scale(Cumulative_Precip) +
+                                 scale(APi) +
                                  scale(Lat) +
                                  scale(Area) +
                                  (1|Site)
@@ -63,7 +63,7 @@ if(site.or.lat ==  "lat"){
                                     )
     formula.bombus.abund2 <- formula(scale(Net_BombusAbundance) |
                                       subset(Weights)~
-                                      scale(Cumulative_Precip) +
+                                      scale(APi) +
                                        scale(Lat) +
                                       (1|Site)
     )
@@ -75,7 +75,7 @@ if(site.or.lat ==  "lat"){
     formula.bombus.abund4 <- formula(scale(Net_BombusAbundance) |
                                       subset(Weights)~
                                       scale(MeanFloralDiversity) +
-                                      scale(Cumulative_Precip) +
+                                      scale(APi) +
                                       scale(Lat) +
                                       scale(Area) +
                                       (1|Site)
@@ -88,7 +88,7 @@ if(site.or.lat ==  "lat"){
                                 )
     formula.HB.abund2 <- formula(scale(Net_HBAbundance) |
                                   subset(Weights)~
-                                  scale(Cumulative_Precip) +
+                                  scale(APi) +
                                   scale(Lat) +
                                   (1|Site)
     )
@@ -100,7 +100,7 @@ if(site.or.lat ==  "lat"){
     formula.HB.abund4 <- formula(scale(Net_HBAbundance) |
                                   subset(Weights)~
                                   scale(MeanFloralDiversity) +
-                                  scale(Cumulative_Precip) +
+                                  scale(APi) +
                                   scale(Lat) +
                                   scale(Area) +
                                   (1|Site)
@@ -117,7 +117,7 @@ if(site.or.lat ==  "lat"){
   
   formula.flower.div2 <- formula(scale(MeanFloralDiversity) |
                                    subset(Weights) ~
-                                   scale(Cumulative_Precip) + 
+                                   scale(APi) + 
                                    scale(Lat) +
                                    Site
   )
@@ -135,7 +135,7 @@ if(site.or.lat ==  "lat"){
   )
   formula.bee.div2 <- formula(scale(Net_BeeDiversity) |
                                 subset(Weights)~
-                                scale(Cumulative_Precip) +
+                                scale(APi) +
                                 scale(Lat) +
                                 Site
   )
@@ -147,7 +147,7 @@ if(site.or.lat ==  "lat"){
   formula.bee.div4 <- formula(scale(Net_BeeDiversity) |
                                 subset(Weights)~
                                 scale(MeanFloralDiversity) +
-                                scale(Cumulative_Precip) +
+                                scale(APi) +
                                 scale(Lat) +
                                 scale(Area) +
                                 Site
@@ -160,7 +160,7 @@ if(site.or.lat ==  "lat"){
   )
   formula.bombus.abund2 <- formula(scale(Net_BombusAbundance) |
                                      subset(Weights)~
-                                     scale(Cumulative_Precip) +
+                                     scale(APi) +
                                      scale(Lat) +
                                      Site
   )
@@ -172,7 +172,7 @@ if(site.or.lat ==  "lat"){
   formula.bombus.abund4 <- formula(scale(Net_BombusAbundance) |
                                      subset(Weights)~
                                      scale(MeanFloralDiversity) +
-                                     scale(Cumulative_Precip) +
+                                     scale(APi) +
                                      scale(Lat) +
                                      scale(Area) +
                                      Site
@@ -185,7 +185,7 @@ if(site.or.lat ==  "lat"){
   )
   formula.HB.abund2 <- formula(scale(Net_HBAbundance) |
                                  subset(Weights)~
-                                 scale(Cumulative_Precip) +
+                                 scale(APi) +
                                  scale(Lat) +
                                  Site
   )
@@ -197,7 +197,7 @@ if(site.or.lat ==  "lat"){
   formula.HB.abund4 <- formula(scale(Net_HBAbundance) |
                                  subset(Weights)~
                                  scale(MeanFloralDiversity) +
-                                 scale(Cumulative_Precip) +
+                                 scale(APi) +
                                  scale(Lat) +
                                  scale(Area) +
                                  Site

@@ -61,6 +61,9 @@ source("src/plant_poll_models.R")
 
 save(spec.net, file="saved/spec_weights.Rdata")
 
+
+## Load phylogeny
+load("../../data/community_phylogeny.Rdata")
 ## Species that are not in the phylogeny are not used. brms is not
 ## allowing an incomplete phylogeny, to avoid the error we changed the
 ## species not present to one that is in the phylogeny.  We chose a
@@ -82,20 +85,20 @@ spec.net$GenusSpecies[spec.net$GenusSpecies %in%
 ## phylogeny must be last in all xvar sets
 
 xvars.fd <-  c("scale(MeanFloralDiversity)",
-               "scale(Cumulative_Precip)",
+               "scale(APi)",
                "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.bd <-  c("scale(Net_BeeDiversity)",
-               "scale(Cumulative_Precip)",
+               "scale(APi)",
                "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.ba <-  c("scale(Net_BombusAbundance)",
                "scale(MeanFloralDiversity)",
-               "scale(Cumulative_Precip)",
+               "scale(APi)",
                "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
@@ -103,13 +106,13 @@ xvars.ba <-  c("scale(Net_BombusAbundance)",
 
 xvars.ha <-  c("scale(Net_HBAbundance)",
                "scale(MeanFloralDiversity)",
-               "scale(Cumulative_Precip)",
+               "scale(APi)",
                "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.d <-  c("scale(rare.degree)",
-              "scale(Cumulative_Precip)",
+              "scale(APi)",
               "scale(Lat)","scale(Area)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
@@ -123,7 +126,7 @@ xvars.a <-  c("scale(Area)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 
-xvars.cp <-  c("scale(Cumulative_Precip)",
+xvars.cp <-  c("scale(APi)",
                "scale(Lat)",
                "(1|Site)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
