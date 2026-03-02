@@ -13,8 +13,12 @@ species_vector <- c("Bombus centralis", "Bombus huntii",
 
 # Set bootstrap parameters
 n_bootstrap <- 1000
-sample_size <- 5
+target_n <- 5  # fixed sample size per the analysis description
 set.seed(123)
+
+
+# Initialize storage for all species-level bootstrap data
+all_species_bootstrap_data <- list()
 
 # Initialize list to store ALL plots across all species
 all_plots <- list()
@@ -32,9 +36,8 @@ for (chosen_species in species_vector) {
   # Get unique sites for this species
   sites <- unique(species_data$Site)
   
-  # Initialize lists for this species
+  # Initialize list for this species
   all_results <- list()
-  all_summaries <- list()
   
   # Loop over all sites
   for (site in sites) {
@@ -60,128 +63,105 @@ for (chosen_species in species_vector) {
         combo_data <- species_data %>%
           filter(Site == site, SampleRound == round, Year == year)
         
-        # Need at least 6 individuals to compare
-        if (nrow(combo_data) < 6) {
+        # Must have more than 5 individuals to perform the resampling test
+        if (nrow(combo_data) <= target_n) {
           message(paste0("Skipping ", chosen_species, " - ", site, " - Round ", round, 
-                         " - Year ", year, ": only ", nrow(combo_data), " individuals"))
+                         " - Year ", year, ": only ", nrow(combo_data), " individuals (need > ", target_n, ")"))
           next
         }
         
-        # Calculate true prevalence (all individuals)
-        true_prev <- mean(combo_data$ParasitePresence, na.rm = TRUE)
+        # Compute p_full from ALL individuals in this stratum
+        p_full <- mean(combo_data$ParasitePresence, na.rm = TRUE)
         n_total <- nrow(combo_data)
         
-        # Bootstrap across different sample sizes
-        sample_sizes <- 1:min(n_total, 15)
-        
-        bootstrap_results <- purrr::map_dfr(sample_sizes, function(n) {
+        # Repeatedly draw exactly target_n individuals without replacement
+        bootstrap_results <- purrr::map_dfr(1:n_bootstrap, function(i) {
+          sampled <- combo_data %>%
+            sample_n(target_n, replace = FALSE)
           
-          size_results <- purrr::map_dfr(1:n_bootstrap, function(i) {
-            sampled <- combo_data %>%
-              sample_n(n, replace = FALSE)
-            
-            tibble(
-              iteration = i,
-              sample_size = n,
-              prevalence = mean(sampled$ParasitePresence, na.rm = TRUE)
-            )
-          })
+          p_5 <- mean(sampled$ParasitePresence, na.rm = TRUE)
           
-          return(size_results)
-        })
-        
-        # Add metadata
-        bootstrap_results <- bootstrap_results %>%
-          mutate(
-            Site = site,
-            SampleRound = round,
-            Year = year,
-            Species = chosen_species,
-            true_prevalence = true_prev,
-            n_total = n_total,
-            abs_diff = abs(prevalence - true_prev)
+          tibble(
+            iteration     = i,
+            p_5           = p_5,
+            p_full        = p_full,
+            abs_diff      = abs(p_full - p_5),
+            signed_diff   = p_full - p_5,  # for checking centering around 0
+            Site          = site,
+            SampleRound   = round,
+            Year          = year,
+            Species       = chosen_species,
+            n_total       = n_total
           )
+        })
         
         # Store results
         combo_name <- paste0(chosen_species, "_", site, "_Round", round, "_Year", year)
         all_results[[combo_name]] <- bootstrap_results
-        
-        # Calculate summary by sample size
-        summary_stats <- bootstrap_results %>%
-          group_by(sample_size) %>%
-          summarise(
-            Site = first(Site),
-            SampleRound = first(SampleRound),
-            Year = first(Year),
-            Species = first(Species),
-            n_total = first(n_total),
-            true_prev = first(true_prevalence),
-            mean_prevalence = mean(prevalence),
-            sd_prevalence = sd(prevalence),
-            mean_abs_diff = mean(abs_diff),
-            .groups = "drop"
-          )
-        
-        all_summaries[[combo_name]] <- summary_stats
       }
     }
   }
   
   # Combine all results for this species
   all_bootstrap_data <- bind_rows(all_results)
-  all_summary_data <- bind_rows(all_summaries)
   
-  # Calculate bootstrap mean prevalence for each site-round-year-sample_size combination
-  bootstrap_means <- all_bootstrap_data %>%
-    group_by(Site, SampleRound, Year, sample_size) %>%
-    summarise(
-      bootstrap_mean_prev = mean(prevalence),
-      .groups = "drop"
-    )
   
-  # Calculate observed prevalence (from all individuals) and join with bootstrap means
-  observed_data <- species_data %>%
-    filter(GenusSpecies == chosen_species) %>%
-    group_by(Site, SampleRound, Year) %>%
-    summarise(
-      observed_prevalence = mean(ParasitePresence, na.rm = TRUE),
-      true_sample_size = n(),
-      .groups = "drop"
-    )
+  if (nrow(all_bootstrap_data) == 0) {
+    message(paste0("No valid strata for species: ", chosen_species, ". Skipping plot."))
+    next
+  }
   
-  # Join and calculate prevalence difference for each bootstrap iteration
-  plot_data <- all_bootstrap_data %>%
-    left_join(bootstrap_means, by = c("Site", "SampleRound", "Year", "sample_size")) %>%
-    left_join(observed_data, by = c("Site", "SampleRound", "Year")) %>%
-    mutate(
-      prevalence_diff = observed_prevalence - bootstrap_mean_prev
-    )
+  # Create a stratum label for grouping on the x-axis
+  all_bootstrap_data <- all_bootstrap_data %>%
+    mutate(stratum = paste0(Site, "\nRound ", SampleRound, "\n", Year,
+                            "\n(n=", n_total, ")"))
   
-  # Create boxplot
-  p <- ggplot(plot_data, aes(x = factor(true_sample_size), y = prevalence_diff)) +
-    geom_boxplot() +
+  # Store species-level tibble
+  all_species_bootstrap_data[[chosen_species]] <- all_bootstrap_data
+  
+  # Plot: distribution of signed differences (p_full - p_5) per stratum
+  # Centered around 0 = no meaningful bias from sampling 5 individuals
+  p <- ggplot(all_bootstrap_data, aes(x = stratum, y = signed_diff)) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "red", linewidth = 0.7) +
+    geom_boxplot(outlier.size = 0.8, fill = "grey85") +
     labs(
-      title = paste0("Species: ", chosen_species),
-      x = "True Sample Size (total individuals sampled)",
-      y = "Prevalence Difference\n(Observed - Bootstrap Mean)"
+      title    = paste0("Species: ", chosen_species),
+      subtitle = paste0("Prevalence stability: ", n_bootstrap, 
+                        " draws of n=", target_n, " vs. p_full (all individuals)"),
+      x        = "Stratum (Site · Round · Year · total n)",
+      y        = expression(p[full] - p[5])
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(size = 12, face = "italic"),
-      axis.text.x = element_text(angle = 0, hjust = 0.5)
+      plot.title    = element_text(size = 12, face = "italic"),
+      plot.subtitle = element_text(size = 9, color = "grey40"),
+      axis.text.x   = element_text(angle = 45, hjust = 1, size = 7)
     )
   
   # Store plot
   all_plots[[chosen_species]] <- p
+  
 }
 
+final_bootstrap_tibble <- bind_rows(all_species_bootstrap_data, .id = "SpeciesName")
+
+summary <- final_bootstrap_tibble %>%
+  mutate(mean_abs_error_total = mean(abs_diff, na.rm = TRUE),
+         mean_signed_error_total = mean(signed_diff, na.rm = TRUE)) %>% 
+  group_by(Species) %>% 
+  summarize(
+    mean_abs_error = mean(abs_diff),
+    mean_signed_error = mean(signed_diff),
+    n_combo = n_distinct(paste(Site, SampleRound, Year))
+  ) 
+  
 # Combine all plots into a panel and save as PDF
 
 combined_plot <- wrap_plots(all_plots, ncol = 2,
                             labels = c("A", "B", "C", "D"))
 
 print(combined_plot)
-ggsave(combined_plot, file="parasites/figures/bootstrap_diff_spp.pdf",
+ggsave(combined_plot, file="parasites/figures/bootstrap_diff_spp.jpg",
        height=10, width=12)
 
 dev.off()
