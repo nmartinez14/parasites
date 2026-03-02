@@ -304,3 +304,64 @@ ggsave(parasite.amplification, file="figures/parasite_amplification.pdf",
        height=6, width=10)
 
 
+## ***************************************************************************
+# Load model for cumulative precipitation
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_cp_cp.Rdata")
+fit.bombus.cp <- fit.parasite.bombus
+
+## Generate newdata draws
+
+cond.effects <- conditional_effects(fit.bombus.cp)
+## ***************************************************************************
+## crithidia ~ bombus abundance
+
+crithidia_cp <-
+  cond.effects[["CrithidiaPresence.CrithidiaPresence_APi"]]
+
+p9.parasite <- ggplot(crithidia_cp, aes(x = APi, 
+                                             y = estimate__)) +
+  geom_line(aes(x = APi, y= estimate__), 
+            size = 1.5) +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.2) +
+  #scale_fill_manual(labels ="Bombus 0.95")+
+  labs(x = "Antecedent Precipitation Index", y = "Crithidia prevalence") +
+  #theme_dark_black()+
+  theme_ms() +
+  #theme(legend.position = "bottom") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size=16),
+        text = element_text(size=16)) +
+  geom_jitter(data=spec.uni,
+              aes(y= CrithidiaParasitismRate, x=APi, 
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
+
+
+
+################################################################################
+## Apicysits ~ bombus abundance
+################################################################################
+apicystis_cp <-
+  cond.effects[["ApicystisSpp.ApicystisSpp_APi"]]
+
+p10.parasite <- ggplot(apicystis_cp, aes(x = APi, 
+                                                y = estimate__)) +
+  geom_line(aes(x = APi, y= estimate__), 
+            size = 1.5, color = "#3182bd") +
+  geom_ribbon(aes(ymin = lower__, ymax = upper__), 
+              alpha=0.4, fill = "#3182bd")+
+  labs(x = "Antecedent Precipitation Index", y = "Apicystis prevalence") +
+  #theme_dark_black()+
+  theme_ms() +
+  #theme(legend.position = "bottom") +
+  theme(axis.title.x = element_text(size=16),
+        axis.title.y = element_text(size=16),
+        text = element_text(size=16))+  
+  geom_jitter(data=spec.uni,
+              aes(y= ApicystisParasitismRate, x=APi, 
+                  color = SiteScreened),
+              width=0.05) +
+  scale_color_gradient(low = "grey80", high = "grey20") +
+  labs(color = "Screened individuals")
