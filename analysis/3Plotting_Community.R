@@ -13,7 +13,7 @@ load(file="saved/spec_weights.Rdata")
 source("src/misc.R")
 source("src/ggplotThemes.R")
 
-site.screened <- spec.orig %>%
+site.screened <- spec.net %>%
   group_by(Site, Year, SampleRound) %>%
   summarise(SiteScreened = sum(!is.na(Apidae)))
 
@@ -47,10 +47,10 @@ p1 <- ggplot(lat_beediv, aes(x = Lat, y = estimate__)) +
   #theme_dark_black()+
   theme_ms() +
   #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=16),
+  theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16)) +
+        axis.title.y = element_text(size=12),
+        text = element_text(size=12)) +
   geom_jitter(data= spec.uni,
              aes(y= scale(Net_BeeDiversity), x=Lat), cex=2)+
   scale_x_continuous(
@@ -77,10 +77,10 @@ p2 <- ggplot(lat_floraldiv, aes(x = Lat, y = estimate__)) +
   #theme_dark_black() +
   theme_ms() +
   #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=16),
+  theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16)) +
+        axis.title.y = element_text(size=11),
+        text = element_text(size=11)) +
   geom_jitter(data=spec.uni,
              aes(y= scale(MeanFloralDiversity), x=Lat), cex=2)+
   scale_x_continuous(
@@ -102,14 +102,14 @@ lat_bombusabund <-
 p3 <- ggplot(lat_bombusabund, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, fill = "#3182bd") +
-  labs(x = "Latitude (log)", y = "Bombus abundance(log)") +
+  labs(x = "Latitude (log)", y = "Bombus \n abundance (log)") +
   #theme_dark_black() +
   theme_ms() +
   #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=16),
+  theme(axis.title.x = element_text(size=12),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=14),
-        text = element_text(size=16)) +
+        axis.title.y = element_text(size=11),
+        text = element_text(size=12)) +
   geom_jitter(data=spec.uni,
              aes(y= scale(Net_BombusAbundance), x=Lat), cex=2)+
   scale_x_continuous(
@@ -126,14 +126,14 @@ lat_apisabund <- cond.effects[["scaleNetHBAbundance.scaleNetHBAbundance_Lat"]]
 p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
   geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
   geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
-  labs(x = "Latitude (log)", y = "Apis abundance (log)") +
+  labs(x = "Latitude (log)", y = "Apis \n abundance (log)") +
   #theme_dark_black() +
    theme_ms() +
   #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=16),
+  theme(axis.title.x = element_text(size=12),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=15),
-        text = element_text(size=16)) +
+        axis.title.y = element_text(size=11),
+        text = element_text(size=12)) +
   geom_jitter(data=spec.uni,
              aes(y= scale(Net_HBAbundance), x=Lat), cex=2)+
   scale_x_continuous(
@@ -170,8 +170,8 @@ p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
   #theme(legend.position = "bottom") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16),
+        axis.title.y = element_text(size=11),
+        text = element_text(size=12),
         plot.title = element_text(color = "black")) +
   geom_jitter(data= spec.uni,aes(y= CrithidiaParasitismRate, x= Lat,
                                  color = SiteScreened),
@@ -201,8 +201,8 @@ p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
   #theme(legend.position = "bottom") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16)) +
+        axis.title.y = element_text(size=11),
+        text = element_text(size=12)) +
   geom_jitter(data= spec.uni,
               aes(y= ApicystisParasitismRate, x= Lat,
                   color = SiteScreened),
@@ -240,8 +240,8 @@ p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
   #theme(legend.position = "bottom") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16), 
+        axis.title.y = element_text(size=11),
+        text = element_text(size=12), 
         plot.title = element_text(color = "black")) +
   geom_jitter(data= spec.uni,
               aes(y= CrithidiaParasitismRate, x= Lat,
@@ -274,8 +274,8 @@ p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
   #theme(legend.position = "bottom") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16)) +
+        axis.title.y = element_text(size=11),
+        text = element_text(size=12)) +
   geom_jitter(data=spec.uni,
               aes(y= ApicystisParasitismRate, x= Lat,
                   color = SiteScreened),
@@ -294,11 +294,11 @@ p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
 lat_full <- ggarrange(p5, p7, p6, p8,
                          p2,p1,p3,p4,
                          labels = c("A", "B", "C","D", "E", "F", "G", "H"),
-                         ncol = 4, nrow = 2, 
-                         heights = 1, widths = c(3, 3, 3, 3))
+                         ncol = 2, nrow = 4, 
+                         heights = c(3, 3, 3, 3), widths = 1)
 
 ggsave(lat_full, file="figures/lat_full.pdf",
-       height=6, width=14)
+       height=21, width=18, units = "cm")
 
 # lat_par <- ggarrange(p5,p7,p6,p8, 
 #                            labels = c("A", "B", "C","D"),  
