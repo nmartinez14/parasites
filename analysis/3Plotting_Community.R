@@ -150,8 +150,8 @@ p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
 #                        ncol = 2, nrow = 2, #adjust plot space 
 #                        font.label = list(color = "white"))
 
-ggsave(lat_community, file="figures/lat_community.pdf",
-       height=8, width=12)
+# ggsave(lat_community, file="figures/lat_community.pdf",
+#        height=8, width=12)
 
 ## ***********************************************************************
 ## lat and crithidia
@@ -294,11 +294,14 @@ p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
 lat_full <- ggarrange(p5, p7, p6, p8,
                          p2,p1,p3,p4,
                          labels = c("A", "B", "C","D", "E", "F", "G", "H"),
+                         font.label = list(size = 12),
+                         common.legend = TRUE,
+                         legend = "bottom",
                          ncol = 2, nrow = 4, 
                          heights = c(3, 3, 3, 3), widths = 1)
 
-ggsave(lat_full, file="figures/lat_full.pdf",
-       height=21, width=18, units = "cm")
+ggsave(lat_full, file="figures/fig4_lat_full.pdf",
+       height=22, width=18, units = "cm")
 
 # lat_par <- ggarrange(p5,p7,p6,p8, 
 #                            labels = c("A", "B", "C","D"),  

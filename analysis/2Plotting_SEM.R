@@ -156,12 +156,12 @@ p4.parasite <- ggplot(apicystis_floraldiv, aes(x = MeanFloralDiversity,
     
 parasite.dilution <- ggarrange(p3.parasite, p1.parasite, p4.parasite, p2.parasite,
                             labels = c("A", "B", "C","D"),
-                            #font.label = list(color = "white"),
+                            font.label = list(size = 13),
                             ncol = 2, nrow = 2,
                             common.legend = TRUE,
                             legend = "bottom")
 
-ggsave(parasite.dilution, file="figures/parasite_diversity.pdf", 
+ggsave(parasite.dilution, file="figures/fig2_parasite_diversity.pdf", 
        height=6, width=10)
 
 ## ***************************************************************************
@@ -295,12 +295,12 @@ p8.parasite <- ggplot(apicystis_hbabun, aes(x = Net_HBAbundance,
 
 parasite.amplification <- ggarrange(p5.parasite, p7.parasite, p6.parasite, p8.parasite,
                                     nrow= 2, ncol = 2,
-                                    #font.label = list(color = "white"),
+                                    font.label = list(size = 13),
                                     labels = c("A", "B", "C", "D"),
                                     common.legend = TRUE,
                                     legend = "bottom")
 
-ggsave(parasite.amplification, file="figures/parasite_amplification.pdf",
+ggsave(parasite.amplification, file="figures/fig3_parasite_amplification.pdf",
        height=6, width=10)
 
 
