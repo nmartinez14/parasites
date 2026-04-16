@@ -1,5 +1,6 @@
 ## Script for plotting all of the community level explanatory variables.
 rm(list=ls())
+setwd("C:/Users/na_ma")
 source("lab_paths.R")
 setwd(local.path)
 ## Packages required
@@ -12,6 +13,7 @@ setwd("parasites/analysis")
 load(file="saved/spec_weights.Rdata")
 source("src/misc.R")
 source("src/ggplotThemes.R")
+source("src/plotMod.R")
 
 site.screened <- spec.net %>%
   group_by(Site, Year, SampleRound) %>%
@@ -27,120 +29,75 @@ spec.uni <- spec.net[spec.net$Weights ==1,]
 load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_lat_lat.Rdata")
 fit.bombus.l <- fit.parasite.bombus
 
-## Generate newdata draws
-cond.effects <- conditional_effects(fit.bombus.l)
 
 ## Community level visuals
 ## ***********************************************************************
 ## bee community diversity and latitude
 ## ***********************************************************************
 
-lat_beediv <-
-  cond.effects[["scaleNetBeeDiversity.scaleNetBeeDiversity_Lat"]]
-
-p1 <- ggplot(lat_beediv, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            color = "darkgoldenrod3") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "darkgoldenrod3") +
-  labs(x = "Latitude (log)", y = "Bee diversity")+
-  #theme_dark_black()+
-  theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=12),
-        text = element_text(size=12)) +
-  geom_jitter(data= spec.uni,
-             aes(y= scale(Net_BeeDiversity), x=Lat), cex=2)+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(spec.uni$Lat, na.rm = TRUE)
-  )
-
+p1 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
+                        this.response = "scaleNetBeeDiversity",
+                        this.effect = "Lat",
+                        significance = "95",
+                        dat.x = "Lat",
+                        dat.y = "Net_BeeDiversity",
+                        y.label = "Bee diversity",
+                        x.label = "Latitude (log)",
+                        parasite = FALSE,
+                        scale.y = TRUE,
+                        angle.x = TRUE,
+                        x.axis.lab = FALSE)
 
 
 ################################################################################
 ## Plant community diversity and latitude
 ################################################################################
-
-lat_floraldiv <-
-  cond.effects[["scaleMeanFloralDiversity.scaleMeanFloralDiversity_Lat"]]
-
-p2 <- ggplot(lat_floraldiv, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "#3182bd") +
-  labs(x = "Latitude (log)", y = "Mean floral diversity") +
-  #theme_dark_black() +
-  theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=11)) +
-  geom_jitter(data=spec.uni,
-             aes(y= scale(MeanFloralDiversity), x=Lat), cex=2)+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(spec.uni$Lat, na.rm = TRUE)
-  )
+p2 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
+                        this.response = "scaleMeanFloralDiversity",
+                        this.effect = "Lat",
+                        significance = "97",
+                        dat.x = "Lat",
+                        dat.y = "MeanFloralDiversity",
+                        y.label = "Mean floral diversity",
+                        x.label = "Latitude (log)",
+                        parasite = FALSE,
+                        scale.y = TRUE,
+                        angle.x = TRUE,
+                        x.axis.lab = FALSE)
 
 
 
 ################################################################################
 ## Bee abundance and lat
 ################################################################################
+p3 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
+                        this.response = "scaleNetBombusAbundance",
+                        this.effect = "Lat",
+                        significance = "97",
+                        dat.x = "Lat",
+                        dat.y = "Net_BombusAbundance",
+                        y.label = expression(atop(italic("Bombus"), "abundance (log)")),
+                        x.label = "Latitude (log)",
+                        parasite = FALSE,
+                        scale.y = TRUE,
+                        angle.x = TRUE)
 
-lat_bombusabund <-
-  cond.effects[["scaleNetBombusAbundance.scaleNetBombusAbundance_Lat"]]
-
-
-p3 <- ggplot(lat_bombusabund, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4, fill = "#3182bd") +
-  labs(x = "Latitude (log)", y = "Bombus \n abundance (log)") +
-  #theme_dark_black() +
-  theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=12),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=12)) +
-  geom_jitter(data=spec.uni,
-             aes(y= scale(Net_BombusAbundance), x=Lat), cex=2)+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(spec.uni$Lat, na.rm = TRUE)
-  )
 
 
 
 ## Honeybee abundance
-lat_apisabund <- cond.effects[["scaleNetHBAbundance.scaleNetHBAbundance_Lat"]]
-
-p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.4) +
-  labs(x = "Latitude (log)", y = "Apis \n abundance (log)") +
-  #theme_dark_black() +
-   theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=12),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=12)) +
-  geom_jitter(data=spec.uni,
-             aes(y= scale(Net_HBAbundance), x=Lat), cex=2)+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(spec.uni$Lat, na.rm = TRUE)
-  )
+p4 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
+                        this.response = "scaleNetHBAbundance",
+                        this.effect = "Lat",
+                        significance = "97",
+                        dat.x = "Lat",
+                        dat.y = "Net_HBAbundance",
+                        y.label = expression(atop(italic("Apis"), "abundance (log)")),
+                        x.label = "Latitude (log)",
+                        parasite = FALSE,
+                        scale.y = TRUE,
+                        angle.x = TRUE
+                        )
 
 
 
@@ -156,66 +113,30 @@ p4 <- ggplot(lat_apisabund, aes(x = Lat, y = estimate__)) +
 ## ***********************************************************************
 ## lat and crithidia
 ## ***********************************************************************
-
-crithidia_lat <-
-  cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
-
-p5 <- ggplot(crithidia_lat, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5) +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__),
-              alpha=0.2) +
-  labs(x = "Latitude (log)", y = "Crithidia prevalence") +
-  #theme_dark_black() +
-  theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=12),
-        plot.title = element_text(color = "black")) +
-  geom_jitter(data= spec.uni,aes(y= CrithidiaParasitismRate, x= Lat,
-                                 color = SiteScreened),
-             width=0.05) +
-  scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals")+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(crithidia_lat$Lat, na.rm = TRUE)
-  )
+p5 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
+                        this.response = "CrithidiaPresence",
+                        this.effect = "Lat",
+                        significance = "ns",
+                        dat.x = "Lat",
+                        dat.y = "CrithidiaParasitismRate",
+                        y.label = expression(atop(italic("Crithidia")~ "prevalence", "in"~italic("Bombus"))),
+                        x.label = "Latitude (log)",
+                        angle.x = TRUE,
+                        x.axis.lab = FALSE)
 
 ## ***********************************************************************
 ## lat and apicystis
 ## ***********************************************************************
-
-apicystis_lat <-
-  cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
-
-p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), fill = "#3182bd",
-              alpha=0.4) +
-  labs(x = "Latitude (log)", y = "Apicystis prevalence") +
-  #theme_dark_black() +
-  theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=12)) +
-  geom_jitter(data= spec.uni,
-              aes(y= ApicystisParasitismRate, x= Lat,
-                  color = SiteScreened),
-              width=0.05) +
-  scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals")+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(crithidia_lat$Lat, na.rm = TRUE)
-  )
-
-
+p6 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
+                        this.response = "ApicystisSpp",
+                        this.effect = "Lat",
+                        significance = "97",
+                        dat.x = "Lat",
+                        dat.y = "ApicystisParasitismRate",
+                        y.label = expression(atop(italic("Apicystis")~ "prevalence", "in"~italic("Bombus"))),
+                        x.label = "Latitude (log)",
+                        angle.x = TRUE,
+                        x.axis.lab = FALSE)
 
 ################################################################################
 ## crithida ~ lat in Apis
@@ -224,72 +145,32 @@ p6 <- ggplot(apicystis_lat, aes(x = Lat, y= estimate__)) +
 load(file="saved/parasiteFit_Apis_CrithidiaPresenceApicystisSpp_lat_lat.Rdata")
 fit.apis.l <- fit.parasite.apis
 
-## Generate newdata draws
-cond.effects <- conditional_effects(fit.apis.l)
-
-crithidia_lat_apis <-
-  cond.effects[["CrithidiaPresence.CrithidiaPresence_Lat"]]
-
-p7 <- ggplot(crithidia_lat_apis, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size= 1.5, 
-            linetype = "dotdash") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), alpha=0.2) +
-  labs(x = "Latitude (log)", y = "Crithidia prevalence") +
-  #theme_dark_black() +
-  theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=12), 
-        plot.title = element_text(color = "black")) +
-  geom_jitter(data= spec.uni,
-              aes(y= CrithidiaParasitismRate, x= Lat,
-                  color = SiteScreened),
-              width=0.05) +
-  scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals") +
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(crithidia_lat_apis$Lat, na.rm = TRUE)
-  )
+p7 <- plot_cond_effects(fit.apis.l, data = spec.uni,
+                        this.response = "CrithidiaPresence",
+                        this.effect = "Lat",
+                        significance = "ns",
+                        dat.x = "Lat",
+                        dat.y = "CrithidiaParasitismRate",
+                        y.label = expression(atop(italic("Crithidia")~ "prevalence", "in"~italic("Apis"))),
+                        x.label = "Latitude (log)",
+                        angle.x = TRUE,
+                        x.axis.lab = FALSE)
 
 
 
 ################################################################################
 ## Lat and apicystis in apis
 ################################################################################
-apicystis_lat_apis <-
-  cond.effects[["ApicystisSpp.ApicystisSpp_Lat"]]
-
-p8 <- ggplot(apicystis_lat_apis, aes(x = Lat, y = estimate__)) +
-  geom_line(aes(x = Lat, y= estimate__), size = 1.5, 
-            linetype = "dotdash", color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "#3182bd") +
-  labs(x = "Latitude (log)", y = "Apicystis prevalence") +
-  #theme_dark_black() +
-   theme_ms() +
-  #theme(legend.position = "bottom") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size=12),
-        axis.title.y = element_text(size=11),
-        text = element_text(size=12)) +
-  geom_jitter(data=spec.uni,
-              aes(y= ApicystisParasitismRate, x= Lat,
-                  color = SiteScreened),
-              width=0.05) +
-  scale_color_gradient(low = "grey80", high = "grey20") +
-  labs(color = "Screened individuals")+
-  scale_x_continuous(
-    breaks = scales::pretty_breaks(n = 6))+
-  coord_cartesian(
-    xlim = range(crithidia_lat_apis$Lat, na.rm = TRUE)
-  )
-
-
-
+p8 <- plot_cond_effects(fit.apis.l, data = spec.uni,
+                        this.response = "ApicystisSpp",
+                        this.effect = "Lat",
+                        significance = "97",
+                        dat.x = "Lat",
+                        dat.y = "ApicystisParasitismRate",
+                        y.label = expression(atop(italic("Apicystis")~ "prevalence", "in"~italic("Apis"))),
+                        x.label = "Latitude (log)",
+                        angle.x = TRUE,
+                        x.axis.lab = FALSE)
 
 lat_full <- ggarrange(p5, p7, p6, p8,
                          p2,p1,p3,p4,
@@ -318,9 +199,17 @@ ggsave(lat_full, file="figures/fig4_lat_full.pdf",
 load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bee_div_fd.Rdata")
 fit.fd <- fit.parasite.bombus
 
-## Generate newdata draws
-cond.effects <- conditional_effects(fit.fd)
-
+p9 <- plot_cond_effects(fit.fd, data = spec.uni,
+                        this.response = "scaleNetBeeDiversity",
+                        this.effect = "MeanFloralDiversity",
+                        significance = "97",
+                        dat.x = "MeanFloralDiversity",
+                        dat.y = "Net_BeeDiversity",
+                        y.label = "Bee diversity",
+                        x.label = "Mean Floral Diversity",
+                        parasite = FALSE,
+                        scale.y = TRUE,
+                        angle.x = TRUE)
 
 beediv_floraldiv <-
   cond.effects[["scaleNetBeeDiversity.scaleNetBeeDiversity_MeanFloralDiversity"]]
@@ -342,6 +231,6 @@ plantdiv_beediv <- ggplot(beediv_floraldiv, aes(x = MeanFloralDiversity,
   geom_point(data=spec.uni,
              aes(y= scale(Net_BeeDiversity), x= MeanFloralDiversity), cex=2)
 
-ggsave(plantdiv_beediv, file="figures/Beediv_floraldiv.pdf",
+ggsave(plantdiv_beediv, file="figures/figS3_Beediv_floraldiv.pdf",
        height=4, width=5)
 

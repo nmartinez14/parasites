@@ -1,3 +1,4 @@
+setwd("C:/Users/na_ma/")
 rm(list=ls())
 source("lab_paths.R")
 setwd(local.path)
