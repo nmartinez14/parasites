@@ -36,7 +36,8 @@ p1 <- plot_cond_effects(fit.bombus.bd, data = spec.uni,
                         significance = "97",
                         x.axis.lab = FALSE,
                         y.label = expression(bolditalic("Crithidia") ~ bold("prevalence")),
-                        x.label = "Bee diversity")
+                        x.label = "Bee diversity",
+                        text.size = 14)
 
 
 
@@ -50,7 +51,8 @@ p2 <- plot_cond_effects(fit.bombus.bd, data = spec.uni,
                         dat.y = "ApicystisParasitismRate",
                         significance = "97",
                         y.label = expression(bolditalic("Apicystis") ~ bold("prevalence")),
-                        x.label = "Bee diversity")
+                        x.label = "Bee diversity",
+                        text.size = 14)
 
 
 ## ***************************************************************************
@@ -67,7 +69,8 @@ p3 <- plot_cond_effects(fit.bombus.fd, data = spec.uni,
                         significance = "97",
                         x.axis.lab = FALSE,
                         y.label = expression(bolditalic("Crithidia") ~ bold("prevalence")),
-                        x.label = "Mean Floral diversity")
+                        x.label = "Mean Floral diversity",
+                        text.size = 14)
 
 
 
@@ -82,7 +85,8 @@ p4 <- plot_cond_effects(fit.bombus.fd, data = spec.uni,
                         dat.y = "ApicystisParasitismRate",
                         significance = "97",
                         y.label = expression(bolditalic("Apicystis") ~ bold("prevalence")),
-                        x.label = "Mean Floral diversity")
+                        x.label = "Mean Floral diversity",
+                        text.size = 14)
 
 
 
@@ -111,7 +115,8 @@ p5 <- plot_cond_effects(fit.bombus.ba, data = spec.uni,
                         x.axis.lab = FALSE,
                         significance = "ns",
                         y.label = expression(bolditalic("Crithidia") ~ bold("prevalence")),
-                        x.label = expression(bolditalic("Bombus") ~ bold("abundance")))
+                        x.label = expression(bolditalic("Bombus") ~ bold("abundance")),
+                        text.size = 14)
 
 
 ################################################################################
@@ -124,7 +129,8 @@ p6 <- plot_cond_effects(fit.bombus.ba, data = spec.uni,
                         dat.y = "ApicystisParasitismRate",
                         significance = "97",
                         y.label = expression(bolditalic("Apicystis") ~ bold("prevalence")),
-                        x.label = expression(bolditalic("Bombus") ~ bold("abundance")))
+                        x.label = expression(bolditalic("Bombus") ~ bold("abundance")),
+                        text.size = 14)
 
 
 
@@ -143,7 +149,8 @@ p7 <- plot_cond_effects(fit.bombus.ha, data = spec.uni,
                         significance = "97",
                         x.axis.lab = FALSE,
                         y.label = expression(bolditalic("Crithidia") ~ bold("prevalence")),
-                        x.label = expression(bolditalic("Apis") ~ bold("abundance")))
+                        x.label = expression(bolditalic("Apis") ~ bold("abundance")),
+                        text.size = 14)
 
 
 ################################################################################
@@ -157,7 +164,8 @@ p8 <- plot_cond_effects(fit.bombus.ha, data = spec.uni,
                         dat.y = "ApicystisParasitismRate",
                         significance = "97",
                         y.label = expression(bolditalic("Apicystis") ~ bold("prevalence")),
-                        x.label = expression(bolditalic("Apis") ~ bold("abundance")))
+                        x.label = expression(bolditalic("Apis") ~ bold("abundance")),
+                        text.size = 14)
 
 
 parasite.amplification <- ggarrange(p5, p7, p6, p8,
