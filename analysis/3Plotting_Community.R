@@ -89,7 +89,7 @@ p3 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
 p4 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         this.response = "scaleNetHBAbundance",
                         this.effect = "Lat",
-                        significance = "97",
+                        significance = "ns",
                         dat.x = "Lat",
                         dat.y = "Net_HBAbundance",
                         y.label = expression(atop(bolditalic("Apis"), bold("abundance (log)"))),
@@ -102,13 +102,13 @@ p4 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
 
 
 
-# lat_community <- ggarrange(p2,p1,p3,p4, #plots that are going to be included in this multipanel figure
-#                        labels = c("A", "B", "C","D"), #labels given each panel 
-#                        ncol = 2, nrow = 2, #adjust plot space 
-#                        font.label = list(color = "white"))
+ lat_community <- ggarrange(p2,p1,p3,p4, #plots that are going to be included in this multipanel figure
+                        labels = c("A", "B", "C","D"), #labels given each panel 
+                        ncol = 2, nrow = 2, #adjust plot space 
+                        font.label = list(size = 12))
 
-# ggsave(lat_community, file="figures/lat_community.pdf",
-#        height=8, width=12)
+ ggsave(lat_community, file="figures/figS3_lat_community.pdf",
+        height=8, width=12)
 
 ## ***********************************************************************
 ## lat and crithidia
@@ -121,8 +121,7 @@ p5 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         dat.y = "CrithidiaParasitismRate",
                         y.label = expression(atop(bolditalic("Crithidia")~ bold("prevalence"), bold("in")~bolditalic("Bombus"))),
                         x.label = "Latitude (log)",
-                        angle.x = TRUE,
-                        x.axis.lab = FALSE)
+                        angle.x = TRUE)
 
 ## ***********************************************************************
 ## lat and apicystis
@@ -135,8 +134,7 @@ p6 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         dat.y = "ApicystisParasitismRate",
                         y.label = expression(atop(bolditalic("Apicystis")~ bold("prevalence"), bold("in")~bolditalic("Bombus"))),
                         x.label = "Latitude (log)",
-                        angle.x = TRUE,
-                        x.axis.lab = FALSE)
+                        angle.x = TRUE)
 
 ################################################################################
 ## crithida ~ lat in Apis
@@ -153,8 +151,7 @@ p7 <- plot_cond_effects(fit.apis.l, data = spec.uni,
                         dat.y = "CrithidiaParasitismRate",
                         y.label = expression(atop(bolditalic("Crithidia")~ bold("prevalence"), bold("in")~bolditalic("Apis"))),
                         x.label = "Latitude (log)",
-                        angle.x = TRUE,
-                        x.axis.lab = FALSE)
+                        angle.x = TRUE)
 
 
 
@@ -169,11 +166,68 @@ p8 <- plot_cond_effects(fit.apis.l, data = spec.uni,
                         dat.y = "ApicystisParasitismRate",
                         y.label = expression(atop(bolditalic("Apicystis")~ bold("prevalence"), bold("in")~bolditalic("Apis"))),
                         x.label = "Latitude (log)",
-                        angle.x = TRUE,
-                        x.axis.lab = FALSE)
+                        angle.x = TRUE)
 
-lat_full <- ggarrange(p5, p7, p6, p8,
-                         p2,p1,p3,p4,
+## ***********************************************************************
+## APi and crithidia in Bombus
+## ***********************************************************************
+# Load model for APi
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_cp_cp.Rdata")
+fit.bombus.cp <- fit.parasite.bombus
+p9 <- plot_cond_effects(fit.bombus.cp, data = spec.uni,
+                        this.response = "CrithidiaPresence",
+                        this.effect = "APi",
+                        significance = "97",
+                        dat.x = "APi",
+                        dat.y = "CrithidiaParasitismRate",
+                        y.label = expression(atop(bolditalic("Crithidia")~ bold("prevalence"), bold("in")~bolditalic("Bombus"))),
+                        x.label = "Antecedent precipitation (mm)")
+
+## ***********************************************************************
+## APi and apicystis in Bombus
+## ***********************************************************************
+p10 <- plot_cond_effects(fit.bombus.cp, data = spec.uni,
+                        this.response = "ApicystisSpp",
+                        this.effect = "APi",
+                        significance = "97",
+                        dat.x = "APi",
+                        dat.y = "ApicystisParasitismRate",
+                        y.label = expression(atop(bolditalic("Apicystis")~ bold("prevalence"), bold("in")~bolditalic("Bombus"))),
+                        x.label = "Antecedent precipitation (mm)")
+
+################################################################################
+## crithida ~ APi in Apis
+## ***************************************************************************
+# Load model for APi
+load(file="saved/parasiteFit_Apis_CrithidiaPresenceApicystisSpp_cp_cp.Rdata")
+fit.apis.cp <- fit.parasite.apis
+
+p11 <- plot_cond_effects(fit.apis.cp, data = spec.uni,
+                        this.response = "CrithidiaPresence",
+                        this.effect = "APi",
+                        significance = "ns",
+                        dat.x = "APi",
+                        dat.y = "CrithidiaParasitismRate",
+                        y.label = expression(atop(bolditalic("Crithidia")~ bold("prevalence"), bold("in")~bolditalic("Apis"))),
+                        x.label = "Antecedent precipitation (mm)")
+
+
+
+################################################################################
+## APi and apicystis in apis
+################################################################################
+p12 <- plot_cond_effects(fit.apis.cp, data = spec.uni,
+                        this.response = "ApicystisSpp",
+                        this.effect = "APi",
+                        significance = "ns",
+                        dat.x = "APi",
+                        dat.y = "ApicystisParasitismRate",
+                        y.label = expression(atop(bolditalic("Apicystis")~ bold("prevalence"), bold("in")~bolditalic("Apis"))),
+                        x.label = "Antecedent precipitation (mm)")
+
+
+env_grads <- ggarrange(p5, p7, p6, p8,
+                         p9,p10,p11,p12,
                          labels = c("A", "B", "C","D", "E", "F", "G", "H"),
                          font.label = list(size = 12),
                          common.legend = TRUE,
@@ -181,7 +235,7 @@ lat_full <- ggarrange(p5, p7, p6, p8,
                          ncol = 2, nrow = 4, 
                          heights = c(3, 3, 3, 3), widths = 1)
 
-ggsave(lat_full, file="figures/fig4_lat_full.pdf",
+ggsave(env_grads, file="figures/fig4_env_grad.pdf",
        height=22, width=18, units = "cm")
 
 # lat_par <- ggarrange(p5,p7,p6,p8, 
