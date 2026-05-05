@@ -46,7 +46,8 @@ p1 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         parasite = FALSE,
                         scale.y = TRUE,
                         angle.x = TRUE,
-                        x.axis.lab = FALSE)
+                        x.axis.lab = FALSE,
+                        text.size = 14)
 
 
 ################################################################################
@@ -63,7 +64,8 @@ p2 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         parasite = FALSE,
                         scale.y = TRUE,
                         angle.x = TRUE,
-                        x.axis.lab = FALSE)
+                        x.axis.lab = FALSE,
+                        text.size = 14)
 
 
 
@@ -80,7 +82,8 @@ p3 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         x.label = "Latitude (log)",
                         parasite = FALSE,
                         scale.y = TRUE,
-                        angle.x = TRUE)
+                        angle.x = TRUE,
+                        text.size = 14)
 
 
 
@@ -96,16 +99,17 @@ p4 <- plot_cond_effects(fit.bombus.l, data = spec.uni,
                         x.label = "Latitude (log)",
                         parasite = FALSE,
                         scale.y = TRUE,
-                        angle.x = TRUE
-                        )
+                        angle.x = TRUE,
+                        text.size = 14)
 
 
 
 
  lat_community <- ggarrange(p2,p1,p3,p4, #plots that are going to be included in this multipanel figure
                         labels = c("A", "B", "C","D"), #labels given each panel 
-                        ncol = 2, nrow = 2, #adjust plot space 
-                        font.label = list(size = 12))
+                        ncol = 2, nrow = 2 #adjust plot space 
+                        #font.label = list(size = 12)
+                        )
 
  ggsave(lat_community, file="figures/figS3_lat_community.pdf",
         height=8, width=12)
@@ -227,7 +231,7 @@ p12 <- plot_cond_effects(fit.apis.cp, data = spec.uni,
 
 
 env_grads <- ggarrange(p5, p7, p6, p8,
-                         p9,p10,p11,p12,
+                         p9,p11,p10,p12,
                          labels = c("A", "B", "C","D", "E", "F", "G", "H"),
                          font.label = list(size = 12),
                          common.legend = TRUE,
@@ -253,7 +257,7 @@ ggsave(env_grads, file="figures/fig4_env_grad.pdf",
 load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bee_div_fd.Rdata")
 fit.fd <- fit.parasite.bombus
 
-p9 <- plot_cond_effects(fit.fd, data = spec.uni,
+p13 <- plot_cond_effects(fit.fd, data = spec.uni,
                         this.response = "scaleNetBeeDiversity",
                         this.effect = "MeanFloralDiversity",
                         significance = "97",
@@ -263,28 +267,10 @@ p9 <- plot_cond_effects(fit.fd, data = spec.uni,
                         x.label = "Mean Floral Diversity",
                         parasite = FALSE,
                         scale.y = TRUE,
-                        angle.x = TRUE)
+                        text.size = 15)
 
-beediv_floraldiv <-
-  cond.effects[["scaleNetBeeDiversity.scaleNetBeeDiversity_MeanFloralDiversity"]]
 
-plantdiv_beediv <- ggplot(beediv_floraldiv, aes(x = MeanFloralDiversity, 
-                                                y = estimate__)) +
-  geom_line(aes(x = MeanFloralDiversity, y= estimate__), 
-            size = 1.5, color = "#3182bd") +
-  geom_ribbon(aes(ymin = lower__, ymax = upper__), 
-              alpha=0.4, fill = "#3182bd") +
-  labs(y = "Bee Species Diversity", x = "Floral Diversity",
-       fill = "Credible interval") +
-  theme(legend.position = "bottom") +
-  theme(axis.title.x = element_text(size=16),
-        axis.title.y = element_text(size=16),
-        text = element_text(size=16)) +
-  theme_ms() +
-  ##theme_dark_black()+
-  geom_point(data=spec.uni,
-             aes(y= scale(Net_BeeDiversity), x= MeanFloralDiversity), cex=2)
 
-ggsave(plantdiv_beediv, file="figures/figS3_Beediv_floraldiv.pdf",
+ggsave(p13, file="figures/figS4_Beediv_floraldiv.pdf",
        height=4, width=5)
 
