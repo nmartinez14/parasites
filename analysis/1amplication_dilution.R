@@ -88,20 +88,20 @@ spec.net$GenusSpecies[spec.net$GenusSpecies %in%
 xvars.fd <-  c("scale(MeanFloralDiversity)",
                "scale(APi)",
                "scale(Lat)","scale(Area)",
-               "(1|Site)",
+               "(1|Site)", "(1|Year)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.bd <-  c("scale(Net_BeeDiversity)",
                "scale(APi)",
                "scale(Lat)","scale(Area)",
-               "(1|Site)",
+               "(1|Site)", "(1|Year)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.ba <-  c("scale(Net_BombusAbundance)",
                "scale(MeanFloralDiversity)",
                "scale(APi)",
                "scale(Lat)","scale(Area)",
-               "(1|Site)",
+               "(1|Site)", "(1|Year)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 
@@ -109,13 +109,13 @@ xvars.ha <-  c("scale(Net_HBAbundance)",
                "scale(MeanFloralDiversity)",
                "scale(APi)",
                "scale(Lat)","scale(Area)",
-               "(1|Site)",
+               "(1|Site)", "(1|Year)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.d <-  c("scale(rare.degree)",
               "scale(APi)",
               "scale(Lat)","scale(Area)",
-               "(1|Site)",
+               "(1|Site)", "(1|Year)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 xvars.l <-  c("scale(Lat)",
@@ -129,7 +129,7 @@ xvars.a <-  c("scale(Area)",
 
 xvars.cp <-  c("scale(APi)",
                "scale(Lat)",
-               "(1|Site)",
+               "(1|Site)", "(1|Year)",
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 

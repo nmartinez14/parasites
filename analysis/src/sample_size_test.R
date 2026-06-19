@@ -147,10 +147,12 @@ final_bootstrap_tibble <- bind_rows(all_species_bootstrap_data, .id = "SpeciesNa
 
 summary <- final_bootstrap_tibble %>%
   mutate(mean_abs_error_total = mean(abs_diff, na.rm = TRUE),
+         sd_abs_error_total = sd(abs_diff, na.rm = TRUE),
          mean_signed_error_total = mean(signed_diff, na.rm = TRUE)) %>% 
   group_by(Species) %>% 
   summarize(
     mean_abs_error = mean(abs_diff),
+    sd_abs_error = sd(abs_diff),
     mean_signed_error = mean(signed_diff),
     n_combo = n_distinct(paste(Site, SampleRound, Year))
   ) 

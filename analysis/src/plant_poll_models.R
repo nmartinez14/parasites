@@ -15,37 +15,37 @@ if(site.or.lat ==  "lat"){
     formula.flower.div1 <- formula(scale(MeanFloralDiversity) |
                                   subset(Weights) ~
                                     scale(Lat) + 
-                                    (1|Site)
+                                    (1|Site) 
                                   )
 
     formula.flower.div2 <- formula(scale(MeanFloralDiversity) |
                                      subset(Weights) ~
                                      scale(APi) + 
                                      scale(Lat) +
-                                     (1|Site)
+                                     (1|Site) + (1|Year)
     )
     formula.flower.div3 <- formula(scale(MeanFloralDiversity) |
                                      subset(Weights) ~
                                      scale(Area) +                              
-                                     (1|Site)
+                                     (1|Site) 
     )
 
     ## bee diversity
     formula.bee.div1 <- formula(scale(Net_BeeDiversity) |
                                subset(Weights)~
                                    scale(Lat) +
-                                   (1|Site)
+                                   (1|Site) 
                                )
     formula.bee.div2 <- formula(scale(Net_BeeDiversity) |
                                  subset(Weights)~
                                  scale(APi) +
                                   scale(Lat) +
-                                 (1|Site)
+                                 (1|Site) + (1|Year)
     )
     formula.bee.div3 <- formula(scale(Net_BeeDiversity) |
                                  subset(Weights)~
                                  scale(Area) +
-                                 (1|Site)
+                                 (1|Site) 
     )
     formula.bee.div4 <- formula(scale(Net_BeeDiversity) |
                                  subset(Weights)~
@@ -53,24 +53,24 @@ if(site.or.lat ==  "lat"){
                                  scale(APi) +
                                  scale(Lat) +
                                  scale(Area) +
-                                 (1|Site)
+                                 (1|Site) + (1|Year)
     )
     ## bombus abund
     formula.bombus.abund1 <- formula(scale(Net_BombusAbundance) |
                                     subset(Weights)~
                                          scale(Lat) +
-                                        (1|Site)
+                                        (1|Site) 
                                     )
     formula.bombus.abund2 <- formula(scale(Net_BombusAbundance) |
                                       subset(Weights)~
                                       scale(APi) +
                                        scale(Lat) +
-                                      (1|Site)
+                                      (1|Site) + (1|Year)
     )
     formula.bombus.abund3 <- formula(scale(Net_BombusAbundance) |
                                       subset(Weights)~
                                       scale(Area) +
-                                      (1|Site)
+                                      (1|Site) 
     )
     formula.bombus.abund4 <- formula(scale(Net_BombusAbundance) |
                                       subset(Weights)~
@@ -78,24 +78,24 @@ if(site.or.lat ==  "lat"){
                                       scale(APi) +
                                       scale(Lat) +
                                       scale(Area) +
-                                      (1|Site)
+                                      (1|Site) + (1|Year)
     )
     ## HB abund
     formula.HB.abund1 <- formula(scale(Net_HBAbundance) |
                                 subset(Weights)~
                                    scale(Lat) +
-                                    (1|Site)
+                                    (1|Site) 
                                 )
     formula.HB.abund2 <- formula(scale(Net_HBAbundance) |
                                   subset(Weights)~
                                   scale(APi) +
                                   scale(Lat) +
-                                  (1|Site)
+                                  (1|Site) + (1|Year)
     )
     formula.HB.abund3 <- formula(scale(Net_HBAbundance) |
                                   subset(Weights)~
                                   scale(Area) +
-                                  (1|Site)
+                                  (1|Site) 
     )
     formula.HB.abund4 <- formula(scale(Net_HBAbundance) |
                                   subset(Weights)~
@@ -103,7 +103,7 @@ if(site.or.lat ==  "lat"){
                                   scale(APi) +
                                   scale(Lat) +
                                   scale(Area) +
-                                  (1|Site)
+                                  (1|Site) + (1|Year)
     )
 
 } else{
