@@ -27,7 +27,7 @@ spec.uni <- spec.net[spec.net$Weights ==1,]
 
 ## ***************************************************************************
 # Load model for bee diversity
-load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bee_div_cp.Rdata")
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bee_div_lat.Rdata")
 fit.bombus.bd <- fit.parasite.bombus
 
 ## ***************************************************************************
@@ -103,7 +103,7 @@ ggsave(parasite.dilution, file="figures/fig2_parasite_diversity.pdf",
 
 ## ***************************************************************************
 # Load model for bombus abundance
-load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bombus_abund_cp.Rdata")
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_bombus_abund_lat.Rdata")
 fit.bombus.ba <- fit.parasite.bombus
 
 ## ***************************************************************************
@@ -113,7 +113,7 @@ p5 <- plot_cond_effects(fit.bombus.ba, data = spec.uni,
                         this.effect = "Net_BombusAbundance",
                         dat.x = "Net_BombusAbundance",
                         x.axis.lab = FALSE,
-                        significance = "ns",
+                        significance = "97",
                         y.label = expression(bolditalic("Crithidia") ~ bold("prevalence")),
                         x.label = expression(bolditalic("Bombus") ~ bold("abundance")),
                         text.size = 14)
@@ -136,7 +136,7 @@ p6 <- plot_cond_effects(fit.bombus.ba, data = spec.uni,
 
 ## ***************************************************************************
 # Load model for apis abundance
-load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_hb_abund_cp.Rdata")
+load(file="saved/parasiteFit_Bombus_CrithidiaPresenceApicystisSpp_hb_abund_lat.Rdata")
 fit.bombus.ha <- fit.parasite.bombus
 
 ################################################################################
@@ -146,7 +146,7 @@ fit.bombus.ha <- fit.parasite.bombus
 p7 <- plot_cond_effects(fit.bombus.ha, data = spec.uni,
                         this.effect = "Net_HBAbundance",
                         dat.x = "Net_HBAbundance",
-                        significance = "97",
+                        significance = "ns",
                         x.axis.lab = FALSE,
                         y.label = expression(bolditalic("Crithidia") ~ bold("prevalence")),
                         x.label = expression(bolditalic("Apis") ~ bold("abundance")),

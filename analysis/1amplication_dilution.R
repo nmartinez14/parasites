@@ -100,8 +100,9 @@ xvars.bd <-  c("scale(Net_BeeDiversity)",
 xvars.ba <-  c("scale(Net_BombusAbundance)",
                "scale(MeanFloralDiversity)",
                "scale(APi)",
-               "scale(Lat)","scale(Area)",
-               "(1|Site)", "(1|Year)",
+               "scale(Lat)","scale(Area)", 
+               "(1|Year)",
+               "(1|Site)", 
                "(1|gr(GenusSpecies, cov = phylo_matrix))")
 
 
